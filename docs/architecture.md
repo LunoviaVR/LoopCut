@@ -56,3 +56,22 @@ Consequences:
   verify each decode+scale chain per adapter instead of assuming one works per vendor.
 - Short-clip timings are dominated by AMF/D3D11 initialization (~300 ms); throughput is benchmarked on
   longer clips by the in-app probe.
+
+### (b) Preview transport inside WebView2 (dev build, RX 9060 XT, raw RGBA + `putImageData`)
+
+Environment: WebView2 / Edge 155, `isSecureContext = true` (dev origin `http://localhost:1420`),
+`navigator.gpu` present with an AMD RDNA-4 adapter, WebCodecs present. (Production origin
+`http://tauri.localhost` is re-checked on an installed build.)
+
+| Method | 960×540 | 1280×720 | 1920×1080 |
+| --- | --- | --- | --- |
+| `Channel<InvokeResponseBody>` push | 123 fps (243 MB/s) | 72 fps (254 MB/s) | 28 fps (220 MB/s) |
+| Custom protocol pull, 1 in flight | 66 fps | 42 fps | 16 fps |
+| Custom protocol pull, 3 in flight | 107 fps | 69 fps | 27 fps |
+| `invoke` → `tauri::ipc::Response` (latency p50 / p95) | 15 / 21 ms | 25 / 31 ms | 64 / 78 ms |
+
+Decision: the v1 preview is rendered by the Rust compositor and delivered as raw RGBA —
+**Channel push for playback** (capped at 1280×720-equivalent pixels, ~70 fps headroom) and
+**`invoke` Response for single frames** (scrubbing, slider drags; ≤ 25 ms at 720p). Full-panel-resolution
+frames are only requested when the playhead is idle. The ~250 MB/s ceiling makes in-webview WebGPU (now
+known to be available) a worthwhile post-v1 optimization for 1080p+ playback.
