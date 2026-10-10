@@ -138,7 +138,7 @@ function main() {
       if (staged.version !== lock.version) {
         fail(`staged version ${staged.version ?? "?"} does not match scripts/ffmpeg.lock.json (${lock.version})`);
       } else if (staged.sha256 !== pin.sha256) {
-        fail(`staged archive SHA-256 does not match scripts/ffmpeg.lock.json; re-run fetch-ffmpeg --force`);
+        fail("staged archive SHA-256 does not match scripts/ffmpeg.lock.json; run node scripts/fetch-ffmpeg.mjs --force");
       }
     } catch (err) {
       fail(`cannot parse ${marker}: ${err.message}`);
