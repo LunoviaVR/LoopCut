@@ -8,12 +8,12 @@ Everything runs locally: no uploads, no accounts, no watermarks.
 
 ## Features
 
-- **Any video in.** MP4, MOV, MKV, WebM, AVI, GIF, ProRes, HEVC 10-bit, HDR (PQ/HLG, tone-mapped), variable-frame-rate
-  phone video, rotated portrait clips — anything FFmpeg reads.
+- **Your videos in.** MP4, MOV, MKV, WebM, AVI, M4V, WMV, FLV, MPEG-TS, MXF, OGV, 3GP and animated GIF/APNG, including
+  ProRes, HEVC 10-bit, HDR (PQ/HLG, tone-mapped), variable-frame-rate phone video and rotated portrait clips.
 - **Editor workflow.** Timeline with filmstrip, in/out handles, splits and multiple kept segments, frame-accurate
   scrubbing and a live preview that renders exactly what will be exported.
-- **Loop shaping.** Speed 0.25×–4×, reverse, ping-pong, seamless-loop crossfade, freeze frames, frame-rate snapping to
-  GIF-exact rates, loop count.
+- **Loop shaping.** Speed 0.25×–4×, reverse, ping-pong, seamless-loop crossfade, frame-rate snapping to GIF-exact
+  rates, loop count for GIFs.
 - **Crop and transform.** Aspect presets (1:1, 4:5, 9:16, 16:9, 4:3, free), rotate and flip.
 - **Color.** Exposure, contrast, highlights/shadows, temperature/tint, saturation/vibrance, lift/gamma/gain wheels,
   curves, per-hue HSL, `.cube` LUTs, sharpen and vignette, presets, before/after.
@@ -29,14 +29,15 @@ Everything runs locally: no uploads, no accounts, no watermarks.
 ### About hardware acceleration and GIFs
 
 No GPU can encode GIF files. In LoopCut the GPU accelerates **decoding, scaling, color, captions and effects** for
-every format, and the GPU's video encoders (NVENC, AMF, Quick Sync) encode **MP4/WebM** exports and timeline proxies.
+every format, and the GPU's video encoders (NVENC, AMF, Quick Sync) encode **MP4** and **WebM AV1** exports and
+timeline proxies (WebM VP9 always uses the CPU).
 GIF palette generation and compression always run on the CPU (the *GPU dither* engine moves palette mapping to the
 GPU). On first launch LoopCut tests what your GPU can do; anything that fails or is slower than the CPU falls back
 automatically, and you can change every choice in **Settings → Performance**.
 
 ## System requirements
 
-- Windows 10 (1803+) or Windows 11, 64-bit
+- Windows 11 or Windows 10, 64-bit (tested on Windows 11)
 - Microsoft Edge WebView2 Runtime (installed automatically if missing)
 - Optional: a DirectX 12 GPU from NVIDIA, AMD or Intel for hardware acceleration
 
