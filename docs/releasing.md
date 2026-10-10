@@ -74,7 +74,9 @@ rotated key means users must reinstall manually. Treat the key as permanent once
    - launch it, import a clip, export a GIF and an MP4, and confirm the FFmpeg files are in the install folder;
    - install the previous public version first, then run the new installer over it (upgrade path). Check that the
      app offers the update, installs it, and relaunches on the new version;
-   - confirm the draft's `latest.json` has the new version and a non-empty `signature`.
+   - confirm the draft's `latest.json` has the new version and a non-empty `signature`, and check that signature
+     against the app's public key: save the `.sig` and the installer from the draft, then run
+     `node scripts/verify-updater-signature.mjs LoopCut_<version>_x64-setup.exe`.
 7. **Publish the draft** (*Edit → Publish release*). Only then does the `releases/latest/download/latest.json` URL
    point at the new version.
 
