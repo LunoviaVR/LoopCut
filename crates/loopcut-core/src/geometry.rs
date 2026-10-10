@@ -31,7 +31,12 @@ pub struct NormRect {
 }
 
 impl NormRect {
-    pub const FULL: Self = Self { x: 0.0, y: 0.0, w: 1.0, h: 1.0 };
+    pub const FULL: Self = Self {
+        x: 0.0,
+        y: 0.0,
+        w: 1.0,
+        h: 1.0,
+    };
 
     /// Clamps into the unit square, keeping a minimum size.
     pub fn clamped(self) -> Self {
@@ -72,8 +77,13 @@ pub struct Orientation {
 impl Orientation {
     /// Combines the source's display-matrix rotation with the user's rotation and flips.
     pub fn new(source_rotation: u16, user_rotation: u16, flip_h: bool, flip_v: bool) -> Self {
-        let rotation = (normalize_rotation(source_rotation) + normalize_rotation(user_rotation)) % 360;
-        Self { rotation, flip_h, flip_v }
+        let rotation =
+            (normalize_rotation(source_rotation) + normalize_rotation(user_rotation)) % 360;
+        Self {
+            rotation,
+            flip_h,
+            flip_v,
+        }
     }
 
     pub fn swaps_axes(&self) -> bool {
@@ -85,7 +95,10 @@ impl Orientation {
         let mut q = p;
         for _ in 0..(self.rotation / 90) {
             // 90° clockwise: (u, v) -> (1 - v, u)
-            q = Point { x: 1.0 - q.y, y: q.x };
+            q = Point {
+                x: 1.0 - q.y,
+                y: q.x,
+            };
         }
         if self.flip_h {
             q.x = 1.0 - q.x;
@@ -107,7 +120,10 @@ impl Orientation {
         }
         for _ in 0..(self.rotation / 90) {
             // inverse of 90° clockwise: (x, y) -> (y, 1 - x)
-            q = Point { x: q.y, y: 1.0 - q.x };
+            q = Point {
+                x: q.y,
+                y: 1.0 - q.x,
+            };
         }
         q
     }
@@ -115,7 +131,10 @@ impl Orientation {
     /// Maps a display-space rectangle to stored space (exact for multiples of 90°).
     pub fn display_rect_to_stored(&self, r: NormRect) -> NormRect {
         let a = self.display_to_stored(Point { x: r.x, y: r.y });
-        let b = self.display_to_stored(Point { x: r.x + r.w, y: r.y + r.h });
+        let b = self.display_to_stored(Point {
+            x: r.x + r.w,
+            y: r.y + r.h,
+        });
         NormRect {
             x: a.x.min(b.x),
             y: a.y.min(b.y),
@@ -147,10 +166,23 @@ pub fn normalize_rotation(deg: u16) -> u16 {
 }
 
 /// Size of the displayed image (after rotation and sample aspect) for a coded frame.
-pub fn display_size(coded_w: u32, coded_h: u32, sample_aspect: f64, orientation: Orientation) -> (u32, u32) {
-    let sar = if sample_aspect.is_finite() && sample_aspect > 0.0 { sample_aspect } else { 1.0 };
+pub fn display_size(
+    coded_w: u32,
+    coded_h: u32,
+    sample_aspect: f64,
+    orientation: Orientation,
+) -> (u32, u32) {
+    let sar = if sample_aspect.is_finite() && sample_aspect > 0.0 {
+        sample_aspect
+    } else {
+        1.0
+    };
     let w = (f64::from(coded_w) * sar).round().max(1.0) as u32;
-    if orientation.swaps_axes() { (coded_h, w) } else { (w, coded_h) }
+    if orientation.swaps_axes() {
+        (coded_h, w)
+    } else {
+        (w, coded_h)
+    }
 }
 
 fn even_floor(v: f64) -> u32 {
@@ -160,7 +192,12 @@ fn even_floor(v: f64) -> u32 {
 
 /// Converts a display-space crop into an even-aligned pixel rectangle in stored (coded) space,
 /// suitable for FFmpeg's `crop=w:h:x:y:exact=1` on 4:2:0 video.
-pub fn stored_crop_px(coded_w: u32, coded_h: u32, orientation: Orientation, crop: NormRect) -> PixelRect {
+pub fn stored_crop_px(
+    coded_w: u32,
+    coded_h: u32,
+    orientation: Orientation,
+    crop: NormRect,
+) -> PixelRect {
     let s = orientation.display_rect_to_stored(crop.clamped());
     let fw = f64::from(coded_w);
     let fh = f64::from(coded_h);
@@ -183,7 +220,11 @@ pub fn stored_crop_px(coded_w: u32, coded_h: u32, orientation: Orientation, crop
 
 /// How the user sized the output.
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize, TS)]
-#[serde(tag = "mode", rename_all = "camelCase", rename_all_fields = "camelCase")]
+#[serde(
+    tag = "mode",
+    rename_all = "camelCase",
+    rename_all_fields = "camelCase"
+)]
 #[ts(export)]
 pub enum OutputSize {
     /// Fixed width, height follows the crop aspect.
@@ -196,13 +237,20 @@ pub enum OutputSize {
 
 /// Output pixel size (display orientation, even dimensions, never upscaled beyond 4× or below 16 px).
 pub fn output_dimensions(crop_display_w: f64, crop_display_h: f64, size: OutputSize) -> (u32, u32) {
-    let aspect = if crop_display_h > 0.0 { crop_display_w / crop_display_h } else { 1.0 };
+    let aspect = if crop_display_h > 0.0 {
+        crop_display_w / crop_display_h
+    } else {
+        1.0
+    };
     let (w, h) = match size {
         OutputSize::Width { width } => {
             let w = f64::from(width);
             (w, w / aspect)
         }
-        OutputSize::Fit { max_width, max_height } => {
+        OutputSize::Fit {
+            max_width,
+            max_height,
+        } => {
             let (mw, mh) = (f64::from(max_width), f64::from(max_height));
             let s = (mw / crop_display_w).min(mh / crop_display_h).min(1.0);
             (crop_display_w * s, crop_display_h * s)
@@ -225,7 +273,10 @@ mod tests {
     #[test]
     fn rotation_90_moves_top_left_to_top_right() {
         let o = Orientation::new(90, 0, false, false);
-        assert!(close(o.stored_to_display(Point { x: 0.0, y: 0.0 }), Point { x: 1.0, y: 0.0 }));
+        assert!(close(
+            o.stored_to_display(Point { x: 0.0, y: 0.0 }),
+            Point { x: 1.0, y: 0.0 }
+        ));
         assert!(o.swaps_axes());
     }
 
@@ -240,13 +291,41 @@ mod tests {
     fn portrait_phone_crop_maps_to_stored_space() {
         // 1920x1080 coded, displayed rotated 90° (1080x1920 portrait). Crop the top half of the display.
         let o = Orientation::new(90, 0, false, false);
-        let r = stored_crop_px(1920, 1080, o, NormRect { x: 0.0, y: 0.0, w: 1.0, h: 0.5 });
-        assert_eq!(r, PixelRect { x: 0, y: 0, w: 960, h: 1080 });
+        let r = stored_crop_px(
+            1920,
+            1080,
+            o,
+            NormRect {
+                x: 0.0,
+                y: 0.0,
+                w: 1.0,
+                h: 0.5,
+            },
+        );
+        assert_eq!(
+            r,
+            PixelRect {
+                x: 0,
+                y: 0,
+                w: 960,
+                h: 1080
+            }
+        );
     }
 
     #[test]
     fn crop_is_even_aligned_and_inside() {
-        let r = stored_crop_px(1919, 1079, Orientation::default(), NormRect { x: 0.333, y: 0.111, w: 0.5, h: 0.77 });
+        let r = stored_crop_px(
+            1919,
+            1079,
+            Orientation::default(),
+            NormRect {
+                x: 0.333,
+                y: 0.111,
+                w: 0.5,
+                h: 0.77,
+            },
+        );
         assert_eq!(r.x % 2, 0);
         assert_eq!(r.y % 2, 0);
         assert_eq!(r.w % 2, 0);
@@ -256,10 +335,23 @@ mod tests {
 
     #[test]
     fn output_dimensions_are_even() {
-        assert_eq!(output_dimensions(1920.0, 1080.0, OutputSize::Width { width: 480 }), (480, 270));
-        assert_eq!(output_dimensions(1000.0, 1000.0, OutputSize::Width { width: 333 }), (334, 334));
         assert_eq!(
-            output_dimensions(1920.0, 1080.0, OutputSize::Fit { max_width: 640, max_height: 640 }),
+            output_dimensions(1920.0, 1080.0, OutputSize::Width { width: 480 }),
+            (480, 270)
+        );
+        assert_eq!(
+            output_dimensions(1000.0, 1000.0, OutputSize::Width { width: 333 }),
+            (334, 334)
+        );
+        assert_eq!(
+            output_dimensions(
+                1920.0,
+                1080.0,
+                OutputSize::Fit {
+                    max_width: 640,
+                    max_height: 640
+                }
+            ),
             (640, 360)
         );
     }

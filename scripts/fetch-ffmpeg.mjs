@@ -1,14 +1,16 @@
 #!/usr/bin/env node
+
 // Downloads the pinned FFmpeg build (scripts/ffmpeg.lock.json), verifies its SHA-256 and stages the
 // binaries into src-tauri/resources/ffmpeg/<version>/ for bundling and for tests.
 //
 // Usage: node scripts/fetch-ffmpeg.mjs [--force]
 
-import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import {
   copyFileSync,
   createReadStream,
+  createWriteStream,
   existsSync,
   mkdirSync,
   readdirSync,
@@ -21,13 +23,13 @@ import { dirname, join, resolve } from "node:path";
 import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
 import { fileURLToPath } from "node:url";
-import { createWriteStream } from "node:fs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const lock = JSON.parse(readFileSync(join(root, "scripts", "ffmpeg.lock.json"), "utf8"));
 const force = process.argv.includes("--force");
 
-const platformKey = process.platform === "win32" && process.arch === "x64" ? "windows-x86_64" : null;
+const platformKey =
+  process.platform === "win32" && process.arch === "x64" ? "windows-x86_64" : null;
 if (!platformKey || !lock[platformKey]) {
   console.error(`fetch-ffmpeg: no pinned FFmpeg build for ${process.platform}-${process.arch}`);
   process.exit(1);

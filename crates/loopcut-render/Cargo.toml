@@ -15,10 +15,15 @@ bytemuck = { workspace = true }
 pollster = { workspace = true }
 cosmic-text = { workspace = true }
 tiny-skia = { workspace = true }
+# Same version cosmic-text already pulls in; named directly to match swash's color-source enum.
+swash = { workspace = true }
 serde = { workspace = true }
 thiserror = { workspace = true }
 tracing = { workspace = true }
 parking_lot = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }
 
 [lints]
 workspace = true

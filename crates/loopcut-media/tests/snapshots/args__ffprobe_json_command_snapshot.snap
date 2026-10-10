@@ -1,0 +1,17 @@
+---
+source: crates/loopcut-media/tests/args.rs
+expression: lossy(cmd.args())
+---
+[
+    "-hide_banner",
+    "-loglevel",
+    "error",
+    "-protocol_whitelist",
+    "file,pipe",
+    "-i",
+    "D:\\media\\vidéo テスト 🎬.mp4",
+    "-print_format",
+    "json",
+    "-show_format",
+    "-show_streams",
+]

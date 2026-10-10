@@ -59,12 +59,21 @@ impl Rational {
         }
         for den in [1u32, 2, 4, 5, 8, 10, 1001, 100, 1000] {
             let num = (fps * f64::from(den)).round();
-            if num >= 1.0 && num <= f64::from(u32::MAX) && ((num / f64::from(den)) - fps).abs() < 1e-6 {
-                return Some(Self { num: num as u32, den });
+            if num >= 1.0
+                && num <= f64::from(u32::MAX)
+                && ((num / f64::from(den)) - fps).abs() < 1e-6
+            {
+                return Some(Self {
+                    num: num as u32,
+                    den,
+                });
             }
         }
         let num = (fps * 1000.0).round();
-        (num >= 1.0).then(|| Self { num: num as u32, den: 1000 })
+        (num >= 1.0).then_some(Self {
+            num: num as u32,
+            den: 1000,
+        })
     }
 }
 
@@ -110,7 +119,10 @@ mod tests {
 
     #[test]
     fn parses_ffprobe_rates() {
-        assert_eq!(Rational::parse("30000/1001"), Some(Rational::new(30000, 1001)));
+        assert_eq!(
+            Rational::parse("30000/1001"),
+            Some(Rational::new(30000, 1001))
+        );
         assert_eq!(Rational::parse("25"), Some(Rational::integer(25)));
         assert_eq!(Rational::parse("0/0"), None);
         assert_eq!(Rational::parse("abc"), None);
@@ -120,7 +132,10 @@ mod tests {
     fn from_f64_prefers_small_denominators() {
         assert_eq!(Rational::from_f64(12.5), Some(Rational::new(25, 2)));
         assert_eq!(Rational::from_f64(20.0), Some(Rational::integer(20)));
-        assert_eq!(Rational::from_f64(29.97002997), Some(Rational::new(30000, 1001)));
+        assert_eq!(
+            Rational::from_f64(29.97002997),
+            Some(Rational::new(30000, 1001))
+        );
         assert_eq!(Rational::from_f64(0.0), None);
     }
 }

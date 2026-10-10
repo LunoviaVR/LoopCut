@@ -1,0 +1,32 @@
+---
+source: crates/loopcut-media/tests/args.rs
+expression: lossy(cmd.args())
+---
+[
+    "-hide_banner",
+    "-loglevel",
+    "error",
+    "-nostdin",
+    "-progress",
+    "pipe:2",
+    "-nostats",
+    "-hwaccel",
+    "amf",
+    "-hwaccel_output_format",
+    "amf",
+    "-ss",
+    "1.500000",
+    "-t",
+    "4.000000",
+    "-protocol_whitelist",
+    "file,pipe",
+    "-noautorotate",
+    "-i",
+    "C:\\clips\\input.mp4",
+    "-vf",
+    "vpp_amf=w=640:h=360:format=nv12",
+    "-c:v",
+    "h264_amf",
+    "-an",
+    "C:\\clips\\out.partial.mp4",
+]

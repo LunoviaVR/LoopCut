@@ -15,12 +15,15 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
 tauri-build = { workspace = true }
+serde_json = { workspace = true }
 
 [dependencies]
 loopcut-core = { workspace = true }
 loopcut-media = { workspace = true }
 loopcut-render = { workspace = true }
 loopcut-export = { workspace = true }
+loopcut-hw = { workspace = true }
+loopcut-preview = { workspace = true }
 
 tauri = { workspace = true }
 tauri-plugin-dialog = { workspace = true }
@@ -34,14 +37,21 @@ tauri-plugin-opener = { workspace = true }
 
 serde = { workspace = true }
 serde_json = { workspace = true }
-thiserror = { workspace = true }
-anyhow = { workspace = true }
 tracing = { workspace = true }
-tokio = { workspace = true }
-tokio-util = { workspace = true }
+tracing-subscriber = { workspace = true }
 parking_lot = { workspace = true }
 percent-encoding = { workspace = true }
 http = { workspace = true }
+sha2 = { workspace = true }
+ts-rs = { workspace = true }
+
+[target.'cfg(windows)'.dependencies]
+# Physical memory size (the default frame-cache budget is a quarter of RAM, capped at 2 GiB) and drive types
+# (mapped network drives are detected before any path is canonicalized).
+windows = { workspace = true, features = ["Win32_System_SystemInformation", "Win32_Storage_FileSystem"] }
+
+[dev-dependencies]
+tempfile = { workspace = true }
 
 [lints]
 workspace = true

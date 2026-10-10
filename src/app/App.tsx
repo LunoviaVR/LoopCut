@@ -1,45 +1,62 @@
-import { invoke, isTauri } from "@tauri-apps/api/core";
-import { useEffect, useRef, useState } from "react";
-import { runSpikes } from "@/features/diagnostics/spikes";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { spikeFlags } from "@/ipc/commands";
+import { Toaster, toast } from "@/ui";
+import { Shell } from "./Shell";
 
-/** Top-level editor shell. Panels are filled in by later milestones. */
+/** Top-level editor: the shell plus the toast host. Panels live in Shell and its children. */
 export function App() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [status, setStatus] = useState<string | null>(null);
+  const { t } = useTranslation();
 
+  // Diagnostics run only when the app was started for them: the M0 spikes (LOOPCUT_RUN_SPIKES=1) and the real-app
+  // self-test (a media file to test). Each module is loaded inside its own branch, so normal startup never pays for
+  // the benchmark or the self-test code.
   useEffect(() => {
-    if (!isTauri()) return;
     let cancelled = false;
-    invoke<{ run: boolean }>("spike_flags")
+    spikeFlags()
       .then(async (flags) => {
-        if (!flags.run || cancelled || !canvasRef.current) return;
-        setStatus("Running diagnostics…");
-        const path = await runSpikes(canvasRef.current);
-        setStatus(`Diagnostics written to ${path}`);
+        if (cancelled) return;
+        if (flags.run) {
+          const { runSpikes } = await import("@/features/diagnostics/spikes");
+          // The spikes draw into a canvas they own; it does not need to be on screen.
+          const canvas = document.createElement("canvas");
+          canvas.width = 640;
+          canvas.height = 360;
+          toast({ title: t("diagnostics.running") });
+          const path = await runSpikes(canvas);
+          toast({ variant: "success", title: t("diagnostics.written", { path }) });
+        }
+        const mediaPath = flags.selftest;
+        if (typeof mediaPath === "string" && mediaPath.length > 0 && !cancelled) {
+          const outDir = flags.selftestOut ?? "";
+          if (outDir.length === 0) {
+            toast({ variant: "error", title: t("diagnostics.selftestNoFolder") });
+            return;
+          }
+          const { runSelftest } = await import("@/features/diagnostics/selftest");
+          toast({ title: t("diagnostics.selftestRunning") });
+          const result = await runSelftest({ mediaPath, outDir });
+          const passed = result.steps.filter((step) => step.ok).length;
+          toast({
+            variant: result.ok ? "success" : "warn",
+            title: t("diagnostics.selftestWritten", { path: result.path }),
+            description: t("diagnostics.selftestSummary", { passed, total: result.steps.length }),
+            duration: 12000,
+          });
+        }
       })
-      .catch((e) => setStatus(`Diagnostics failed: ${String(e)}`));
+      .catch((error: unknown) => {
+        toast({ variant: "error", title: t("diagnostics.failed", { error: String(error) }) });
+      });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [t]);
 
   return (
-    <div className="grid h-full grid-rows-[40px_1fr_220px] bg-bg">
-      <header className="flex items-center gap-3 border-b border-line bg-panel px-3">
-        <span className="font-semibold tracking-tight">LoopCut</span>
-        {status && <span className="text-fg-muted text-xs">{status}</span>}
-      </header>
-      <main className="grid min-h-0 grid-cols-[260px_1fr_300px]">
-        <aside className="border-r border-line bg-panel" aria-label="Media" />
-        <section
-          className="flex min-h-0 items-center justify-center bg-preview"
-          aria-label="Preview"
-        >
-          <canvas ref={canvasRef} className="max-h-full max-w-full" width={640} height={360} />
-        </section>
-        <aside className="border-l border-line bg-panel" aria-label="Inspector" />
-      </main>
-      <section className="border-t border-line bg-panel" aria-label="Timeline" />
-    </div>
+    <>
+      <Shell />
+      <Toaster />
+    </>
   );
 }

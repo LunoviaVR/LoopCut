@@ -12,7 +12,7 @@
 
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, statSync } from "node:fs";
-import { dirname, extname, join, resolve, basename } from "node:path";
+import { basename, dirname, extname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -35,7 +35,9 @@ function parseArgs(argv) {
       outDir = resolve(argv[i + 1]);
       i += 1;
     } else {
-      console.error(`gen-test-media: unknown argument "${arg}"\nusage: node scripts/gen-test-media.mjs [--force] [--out <dir>]`);
+      console.error(
+        `gen-test-media: unknown argument "${arg}"\nusage: node scripts/gen-test-media.mjs [--force] [--out <dir>]`,
+      );
       process.exit(2);
     }
   }
@@ -66,14 +68,15 @@ const alphaGradient = (w, h, seconds) => [
 /** Options shared by every output: no ffmpeg/encoder version strings, so reruns are byte-identical. */
 const DETERMINISTIC = ["-map_metadata", "-1", "-fflags", "+bitexact", "-flags", "+bitexact"];
 
-/** Options for the H.264 base clips: a silent AAC track too, like a phone recording. */
+/** Encoder options for the H.264 base clips. */
 const H264 = ["-c:v", "libx264", "-preset", "ultrafast", "-crf", "28", "-pix_fmt", "yuv420p"];
 
 /**
- * HDR10 / HLG tagging for libx265 10-bit output. The tags are what matters to the color path; the pixels are
- * the test pattern converted to 10-bit.
+ * HDR tagging for libx265 10-bit output. Both the container-level color flags and the x265 VUI parameters are
+ * set: the flags alone do not reach the HEVC VUI, so ffprobe would report the transfer as unknown. The pixels are
+ * the test pattern converted to 10-bit; only the tags matter to the color path.
  */
-const hdr = (transfer, extra = []) => [
+const hdr = (transfer, extraParams = []) => [
   "-c:v",
   "libx265",
   "-preset",
@@ -91,7 +94,14 @@ const hdr = (transfer, extra = []) => [
   "-color_range",
   "tv",
   "-x265-params",
-  ["log-level=error", ...extra].join(":"),
+  [
+    "log-level=error",
+    "colorprim=bt2020",
+    `transfer=${transfer}`,
+    "colormatrix=bt2020nc",
+    "range=limited",
+    ...extraParams,
+  ].join(":"),
 ];
 
 // ---------------------------------------------------------------------------------------------------------
@@ -133,12 +143,13 @@ const FIXTURES = [
     ],
   },
   {
-    // Frame timestamps advance unevenly (1.25, 1.0, 0.25 frame intervals), so the stream is VFR.
+    // The first 20 frames keep 30 fps timing and the rest step 3 frame-periods apart (10 fps), so the
+    // stream's r_frame_rate (30) and avg_frame_rate (about 18.75) differ: a genuine VFR stream.
     name: "h264_vfr.mp4",
     args: () => [
-      ...testPattern(320, 240, 2),
+      ...testPattern(320, 240, 1),
       "-vf",
-      "setpts='(N+0.25*mod(N,3))/(30*TB)'",
+      "setpts='if(lt(N,20),N,20+(N-20)*3)/(30*TB)'",
       "-fps_mode",
       "passthrough",
       ...H264,
@@ -200,7 +211,14 @@ const FIXTURES = [
   },
   {
     name: "hdr_hlg.mp4",
-    args: () => [...testPattern(320, 240, 1), ...hdr("arib-std-b67"), "-an", "-movflags", "+faststart", ...DETERMINISTIC],
+    args: () => [
+      ...testPattern(320, 240, 1),
+      ...hdr("arib-std-b67"),
+      "-an",
+      "-movflags",
+      "+faststart",
+      ...DETERMINISTIC,
+    ],
   },
   {
     name: "yuv422_prores.mov",
@@ -378,11 +396,25 @@ const FIXTURES = [
   },
   {
     name: "unicode vidéo テスト 🎬.mp4",
-    args: () => [...testPattern(320, 240, 1), ...H264, "-an", "-movflags", "+faststart", ...DETERMINISTIC],
+    args: () => [
+      ...testPattern(320, 240, 1),
+      ...H264,
+      "-an",
+      "-movflags",
+      "+faststart",
+      ...DETERMINISTIC,
+    ],
   },
   {
     name: `long-path/${LONG_NAME}/long_path_fixture.mp4`,
-    args: () => [...testPattern(320, 240, 1), ...H264, "-an", "-movflags", "+faststart", ...DETERMINISTIC],
+    args: () => [
+      ...testPattern(320, 240, 1),
+      ...H264,
+      "-an",
+      "-movflags",
+      "+faststart",
+      ...DETERMINISTIC,
+    ],
   },
 ];
 
@@ -392,11 +424,15 @@ const FIXTURES = [
 
 /** Runs ffmpeg with `argv`, returning null on success or the last stderr lines on failure. */
 function runFfmpeg(argv) {
-  const result = spawnSync(ffmpeg, ["-hide_banner", "-loglevel", "error", "-nostdin", "-y", ...argv], {
-    encoding: "utf8",
-    windowsHide: true,
-    maxBuffer: 16 * 1024 * 1024,
-  });
+  const result = spawnSync(
+    ffmpeg,
+    ["-hide_banner", "-loglevel", "error", "-nostdin", "-y", ...argv],
+    {
+      encoding: "utf8",
+      windowsHide: true,
+      maxBuffer: 16 * 1024 * 1024,
+    },
+  );
   if (result.error) return result.error.message;
   if (result.status !== 0) {
     return (result.stderr || `exit ${result.status}`).trim().split(/\r?\n/).slice(-3).join(" | ");
@@ -408,14 +444,23 @@ function runFfmpeg(argv) {
 function describe(file) {
   const result = spawnSync(
     ffprobe,
-    ["-v", "error", "-show_entries", "stream=codec_type,codec_name,pix_fmt,width,height", "-of", "json", file],
+    [
+      "-v",
+      "error",
+      "-show_entries",
+      "stream=codec_type,codec_name,pix_fmt,width,height",
+      "-of",
+      "json",
+      file,
+    ],
     { encoding: "utf8", windowsHide: true },
   );
   if (result.status !== 0) return "ffprobe failed";
   const streams = JSON.parse(result.stdout).streams ?? [];
   return streams
     .map((s) => {
-      if (s.codec_type === "video") return `${s.codec_name}/${s.pix_fmt ?? "?"} ${s.width}x${s.height}`;
+      if (s.codec_type === "video")
+        return `${s.codec_name}/${s.pix_fmt ?? "?"} ${s.width}x${s.height}`;
       return s.codec_type === "audio" ? s.codec_name : `${s.codec_type}:${s.codec_name ?? "?"}`;
     })
     .join(", ");
@@ -423,7 +468,9 @@ function describe(file) {
 
 function main() {
   if (!existsSync(ffmpeg) || !existsSync(ffprobe)) {
-    console.error(`gen-test-media: ${stageDir} has no ffmpeg/ffprobe; run "node scripts/fetch-ffmpeg.mjs" first`);
+    console.error(
+      `gen-test-media: ${stageDir} has no ffmpeg/ffprobe; run "node scripts/fetch-ffmpeg.mjs" first`,
+    );
     process.exit(1);
   }
   mkdirSync(outDir, { recursive: true });
@@ -440,7 +487,12 @@ function main() {
       continue;
     }
     if (fixture.requires && !existsSync(join(outDir, fixture.requires))) {
-      results.push({ name: fixture.name, status: "failed", streams: "", error: `missing ${fixture.requires}` });
+      results.push({
+        name: fixture.name,
+        status: "failed",
+        streams: "",
+        error: `missing ${fixture.requires}`,
+      });
       continue;
     }
 
@@ -456,17 +508,18 @@ function main() {
   }
 
   const failed = results.filter((r) => r.status === "failed");
-  const width = Math.max(...results.map((r) => r.name.length), 4);
   console.log(`gen-test-media: ${outDir}`);
   console.log("");
   for (const r of results) {
-    const line = `${r.status.padEnd(8)} ${r.name.padEnd(width)}  ${r.streams || r.error}`;
-    console.log(line.trimEnd());
+    console.log(`${r.status.padEnd(8)} ${r.name}`);
+    console.log(`         ${r.streams || r.error}`);
   }
   console.log("");
   const created = results.filter((r) => r.status === "created").length;
   const skipped = results.filter((r) => r.status === "skipped").length;
-  console.log(`${results.length} fixtures: ${created} created, ${skipped} skipped, ${failed.length} failed`);
+  console.log(
+    `${results.length} fixtures: ${created} created, ${skipped} skipped, ${failed.length} failed`,
+  );
   if (failed.length > 0) {
     console.error(`gen-test-media: ${failed.length} fixture(s) failed`);
     process.exit(1);

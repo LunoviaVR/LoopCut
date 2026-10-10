@@ -23,4 +23,8 @@ colors: number, dither: Dither,
 /**
  * Optional size budget in bytes (target-size mode).
  */
-targetBytes: number | null, };
+targetBytes: number | null, 
+/**
+ * Platform preset id (see `crate::presets`) the settings were taken from.
+ */
+preset: string | null, };

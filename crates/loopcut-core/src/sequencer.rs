@@ -19,7 +19,11 @@ pub const MAX_OUTPUT_FRAMES: usize = 3000;
 
 /// What a single output frame shows.
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize, TS)]
-#[serde(tag = "kind", rename_all = "camelCase", rename_all_fields = "camelCase")]
+#[serde(
+    tag = "kind",
+    rename_all = "camelCase",
+    rename_all_fields = "camelCase"
+)]
 #[ts(export)]
 pub enum Sample {
     /// The source frame displayed at source time `t`.
@@ -68,7 +72,11 @@ impl SequencePlan {
 
     /// Every distinct source time referenced by the plan, ascending.
     pub fn source_times(&self) -> Vec<f64> {
-        let mut v: Vec<f64> = self.frames.iter().flat_map(|f| f.sample.source_times()).collect();
+        let mut v: Vec<f64> = self
+            .frames
+            .iter()
+            .flat_map(|f| f.sample.source_times())
+            .collect();
         v.sort_by(f64::total_cmp);
         v.dedup_by(|a, b| (*a - *b).abs() < 1e-9);
         v
@@ -144,13 +152,22 @@ fn pieces(clip: &Clip) -> Result<Vec<Piece>, SequenceError> {
         let mut cursor = seg.start;
         for h in holds.iter().filter(|h| h.at >= seg.start && h.at < seg.end) {
             if h.at > cursor {
-                out.push(Piece::Play { start: cursor, end: h.at });
+                out.push(Piece::Play {
+                    start: cursor,
+                    end: h.at,
+                });
             }
-            out.push(Piece::Hold { at: h.at, duration: h.duration });
+            out.push(Piece::Hold {
+                at: h.at,
+                duration: h.duration,
+            });
             cursor = h.at;
         }
         if seg.end > cursor {
-            out.push(Piece::Play { start: cursor, end: seg.end });
+            out.push(Piece::Play {
+                start: cursor,
+                end: seg.end,
+            });
         }
     }
     Ok(out)
@@ -161,7 +178,11 @@ pub fn plan(clip: &Clip, timing: &Timing, fps: Rational) -> Result<SequencePlan,
     if !fps.is_valid() || fps.as_f64() > 240.0 {
         return Err(SequenceError::InvalidFps);
     }
-    let speed = if timing.speed.is_finite() { timing.speed.clamp(MIN_SPEED, MAX_SPEED) } else { 1.0 };
+    let speed = if timing.speed.is_finite() {
+        timing.speed.clamp(MIN_SPEED, MAX_SPEED)
+    } else {
+        1.0
+    };
     let pieces = pieces(clip)?;
     let total: f64 = pieces.iter().map(|p| p.output_duration(speed)).sum();
     let fps_f = fps.as_f64();
@@ -192,7 +213,12 @@ pub fn plan(clip: &Clip, timing: &Timing, fps: Rational) -> Result<SequencePlan,
         Direction::PingPong => {
             let mut v: Vec<Sample> = forward.iter().map(|&t| Sample::At { t }).collect();
             if forward.len() > 2 {
-                v.extend(forward[1..forward.len() - 1].iter().rev().map(|&t| Sample::At { t }));
+                v.extend(
+                    forward[1..forward.len() - 1]
+                        .iter()
+                        .rev()
+                        .map(|&t| Sample::At { t }),
+                );
             }
             v
         }
@@ -212,7 +238,11 @@ pub fn plan(clip: &Clip, timing: &Timing, fps: Rational) -> Result<SequencePlan,
                 let tail = at(&samples[n - nc + i]);
                 let head = at(&samples[i]);
                 let w = (i + 1) as f32 / (nc + 1) as f32;
-                blended.push(Sample::Blend { a: tail, b: head, weight_b: w });
+                blended.push(Sample::Blend {
+                    a: tail,
+                    b: head,
+                    weight_b: w,
+                });
             }
             blended.extend_from_slice(&samples[nc..n - nc]);
             samples = blended;
@@ -226,7 +256,11 @@ pub fn plan(clip: &Clip, timing: &Timing, fps: Rational) -> Result<SequencePlan,
         .map(|(sample, delay_cs)| PlannedFrame { sample, delay_cs })
         .collect();
     let duration = frames.len() as f64 / fps_f;
-    Ok(SequencePlan { fps, frames, duration })
+    Ok(SequencePlan {
+        fps,
+        frames,
+        duration,
+    })
 }
 
 #[cfg(test)]
@@ -240,7 +274,10 @@ mod tests {
             id: "c".into(),
             path: "x.mp4".into(),
             stream_index: 0,
-            segments: segments.iter().map(|&(a, b)| TimeRange::new(a, b)).collect(),
+            segments: segments
+                .iter()
+                .map(|&(a, b)| TimeRange::new(a, b))
+                .collect(),
             holds: vec![],
         }
     }
@@ -257,7 +294,12 @@ mod tests {
 
     #[test]
     fn forward_one_second_at_10fps() {
-        let p = plan(&clip(&[(2.0, 3.0)]), &Timing::default(), Rational::integer(10)).unwrap();
+        let p = plan(
+            &clip(&[(2.0, 3.0)]),
+            &Timing::default(),
+            Rational::integer(10),
+        )
+        .unwrap();
         assert_eq!(p.len(), 10);
         let t = times(&p);
         assert!((t[0] - 2.0).abs() < 1e-9 && (t[9] - 2.9).abs() < 1e-9);
@@ -266,20 +308,37 @@ mod tests {
 
     #[test]
     fn speed_changes_frame_count_not_source_range() {
-        let fast = Timing { speed: 2.0, ..Timing::default() };
+        let fast = Timing {
+            speed: 2.0,
+            ..Timing::default()
+        };
         let p = plan(&clip(&[(0.0, 2.0)]), &fast, Rational::integer(10)).unwrap();
         assert_eq!(p.len(), 10);
         assert!((times(&p)[9] - 1.8).abs() < 1e-9);
-        let slow = Timing { speed: 0.5, ..Timing::default() };
-        assert_eq!(plan(&clip(&[(0.0, 2.0)]), &slow, Rational::integer(10)).unwrap().len(), 40);
+        let slow = Timing {
+            speed: 0.5,
+            ..Timing::default()
+        };
+        assert_eq!(
+            plan(&clip(&[(0.0, 2.0)]), &slow, Rational::integer(10))
+                .unwrap()
+                .len(),
+            40
+        );
     }
 
     #[test]
     fn reverse_and_pingpong() {
-        let rev = Timing { direction: Direction::Reverse, ..Timing::default() };
+        let rev = Timing {
+            direction: Direction::Reverse,
+            ..Timing::default()
+        };
         let p = plan(&clip(&[(0.0, 1.0)]), &rev, Rational::integer(10)).unwrap();
         assert!((times(&p)[0] - 0.9).abs() < 1e-9);
-        let pp = Timing { direction: Direction::PingPong, ..Timing::default() };
+        let pp = Timing {
+            direction: Direction::PingPong,
+            ..Timing::default()
+        };
         let p = plan(&clip(&[(0.0, 1.0)]), &pp, Rational::integer(10)).unwrap();
         assert_eq!(p.len(), 18); // 10 forward + 8 back, endpoints not repeated
         let t = times(&p);
@@ -288,7 +347,12 @@ mod tests {
 
     #[test]
     fn segments_concatenate_in_order() {
-        let p = plan(&clip(&[(5.0, 5.5), (1.0, 1.5)]), &Timing::default(), Rational::integer(10)).unwrap();
+        let p = plan(
+            &clip(&[(5.0, 5.5), (1.0, 1.5)]),
+            &Timing::default(),
+            Rational::integer(10),
+        )
+        .unwrap();
         let t = times(&p);
         assert_eq!(p.len(), 10);
         assert!((t[0] - 1.0).abs() < 1e-9 && (t[5] - 5.0).abs() < 1e-9);
@@ -297,7 +361,10 @@ mod tests {
     #[test]
     fn holds_freeze_the_frame() {
         let mut c = clip(&[(0.0, 1.0)]);
-        c.holds.push(Hold { at: 0.5, duration: 0.5 });
+        c.holds.push(Hold {
+            at: 0.5,
+            duration: 0.5,
+        });
         let p = plan(&c, &Timing::default(), Rational::integer(10)).unwrap();
         assert_eq!(p.len(), 15);
         let t = times(&p);
@@ -307,7 +374,10 @@ mod tests {
 
     #[test]
     fn crossfade_shortens_and_blends_head() {
-        let xf = Timing { crossfade: 0.3, ..Timing::default() };
+        let xf = Timing {
+            crossfade: 0.3,
+            ..Timing::default()
+        };
         let p = plan(&clip(&[(0.0, 2.0)]), &xf, Rational::integer(10)).unwrap();
         assert_eq!(p.len(), 17);
         match p.frames[0].sample {
@@ -321,13 +391,24 @@ mod tests {
 
     #[test]
     fn rejects_bad_input() {
-        assert_eq!(plan(&clip(&[]), &Timing::default(), Rational::integer(10)), Err(SequenceError::Empty));
         assert_eq!(
-            plan(&clip(&[(0.0, 1.0)]), &Timing::default(), Rational::new(0, 1)),
+            plan(&clip(&[]), &Timing::default(), Rational::integer(10)),
+            Err(SequenceError::Empty)
+        );
+        assert_eq!(
+            plan(
+                &clip(&[(0.0, 1.0)]),
+                &Timing::default(),
+                Rational::new(0, 1)
+            ),
             Err(SequenceError::InvalidFps)
         );
         assert!(matches!(
-            plan(&clip(&[(0.0, 1000.0)]), &Timing::default(), Rational::integer(50)),
+            plan(
+                &clip(&[(0.0, 1000.0)]),
+                &Timing::default(),
+                Rational::integer(50)
+            ),
             Err(SequenceError::TooLong(_))
         ));
     }
@@ -335,7 +416,10 @@ mod tests {
     #[test]
     fn required_ranges_merge() {
         let mut c = clip(&[(0.0, 1.0), (0.5, 2.0), (3.0, 4.0)]);
-        c.holds.push(Hold { at: 10.0, duration: 1.0 });
+        c.holds.push(Hold {
+            at: 10.0,
+            duration: 1.0,
+        });
         let r = required_source_ranges(&c);
         assert_eq!(r.len(), 3);
         assert_eq!(r[0], TimeRange::new(0.0, 2.0));
@@ -344,6 +428,7 @@ mod tests {
     proptest! {
         #[test]
         fn delays_sum_matches_duration(len in 0.2f64..20.0, speed in 0.25f64..4.0, fps_i in 5u32..50) {
+            prop_assume!(len / speed * f64::from(fps_i) < MAX_OUTPUT_FRAMES as f64 - 1.0);
             let timing = Timing { speed, ..Timing::default() };
             let p = plan(&clip(&[(1.0, 1.0 + len)]), &timing, Rational::integer(fps_i)).unwrap();
             let total_cs: u32 = p.frames.iter().map(|f| u32::from(f.delay_cs)).sum();

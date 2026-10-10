@@ -136,9 +136,13 @@ function main() {
     try {
       const staged = JSON.parse(readFileSync(marker, "utf8"));
       if (staged.version !== lock.version) {
-        fail(`staged version ${staged.version ?? "?"} does not match scripts/ffmpeg.lock.json (${lock.version})`);
+        fail(
+          `staged version ${staged.version ?? "?"} does not match scripts/ffmpeg.lock.json (${lock.version})`,
+        );
       } else if (staged.sha256 !== pin.sha256) {
-        fail("staged archive SHA-256 does not match scripts/ffmpeg.lock.json; run node scripts/fetch-ffmpeg.mjs --force");
+        fail(
+          "staged archive SHA-256 does not match scripts/ffmpeg.lock.json; run node scripts/fetch-ffmpeg.mjs --force",
+        );
       }
     } catch (err) {
       fail(`cannot parse ${marker}: ${err.message}`);
@@ -153,7 +157,9 @@ function main() {
     });
     if (result.error) throw result.error;
     if (result.status !== 0) {
-      throw new Error(`${bin} ${args.join(" ")} exited with ${result.status}: ${result.stderr.trim()}`);
+      throw new Error(
+        `${bin} ${args.join(" ")} exited with ${result.status}: ${result.stderr.trim()}`,
+      );
     }
     return result.stdout;
   };

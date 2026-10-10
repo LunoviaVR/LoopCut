@@ -1,0 +1,2 @@
+ANSWER: {"optionId":"reroll","steer":"","register":"safer"}
+REGISTER: the user steered the next hand to the safer register. Re-run concept-seed with the same key, the next --reroll round, and --register safer, then follow what it prints; the register is the user's steering, never yours to pre-select.

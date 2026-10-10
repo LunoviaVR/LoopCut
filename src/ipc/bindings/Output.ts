@@ -4,7 +4,8 @@ import type { Rational } from "./Rational";
 
 export type Output = { fps: Rational, size: OutputSize, 
 /**
- * GIF loop count; 0 = loop forever.
+ * How many times the GIF plays: 0 = forever, 1 = once (no NETSCAPE loop block), N = N plays in total
+ * (written as N - 1 repeats).
  */
 loopCount: number, 
 /**

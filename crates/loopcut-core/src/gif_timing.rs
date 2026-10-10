@@ -22,7 +22,11 @@ pub const EXACT_GIF_RATES: [Rational; 6] = [
 
 /// Clamps a requested frame rate to what a GIF can play.
 pub fn clamp_gif_fps(fps: Rational) -> Rational {
-    if fps.as_f64() > MAX_GIF_FPS { Rational::integer(50) } else { fps }
+    if fps.as_f64() > MAX_GIF_FPS {
+        Rational::integer(50)
+    } else {
+        fps
+    }
 }
 
 /// Returns the exact-centisecond rate closest to `fps` (used by the "snap fps" option).
@@ -32,7 +36,9 @@ pub fn snap_fps(fps: Rational) -> Rational {
         .iter()
         .copied()
         .min_by(|a, b| {
-            (a.as_f64() - target).abs().total_cmp(&(b.as_f64() - target).abs())
+            (a.as_f64() - target)
+                .abs()
+                .total_cmp(&(b.as_f64() - target).abs())
         })
         .unwrap_or(Rational::integer(20))
 }
@@ -57,7 +63,11 @@ pub fn delays_cs(count: usize, fps: Rational) -> Vec<u16> {
 pub fn effective_fps(fps: Rational) -> f64 {
     let d = delays_cs(100, fps);
     let total: u32 = d.iter().map(|&x| u32::from(x)).sum();
-    if total == 0 { 0.0 } else { 100.0 * d.len() as f64 / f64::from(total) }
+    if total == 0 {
+        0.0
+    } else {
+        100.0 * d.len() as f64 / f64::from(total)
+    }
 }
 
 #[cfg(test)]
@@ -79,7 +89,11 @@ mod tests {
 
     #[test]
     fn caps_at_fifty_fps() {
-        assert!(delays_cs(20, Rational::integer(60)).iter().all(|&d| d >= MIN_DELAY_CS));
+        assert!(
+            delays_cs(20, Rational::integer(60))
+                .iter()
+                .all(|&d| d >= MIN_DELAY_CS)
+        );
         assert_eq!(clamp_gif_fps(Rational::integer(60)), Rational::integer(50));
         assert!((effective_fps(Rational::integer(60)) - 50.0).abs() < 1e-9);
     }

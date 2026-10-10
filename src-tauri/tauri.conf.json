@@ -61,7 +61,11 @@
       "icons/icon.ico"
     ],
     "resources": {
-      "resources/ffmpeg/": "ffmpeg/"
+      "resources/ffmpeg/": "ffmpeg/",
+      "../LICENSE": "licenses/LICENSE.txt",
+      "../THIRD_PARTY_NOTICES.md": "licenses/THIRD_PARTY_NOTICES.md",
+      "../assets/fonts/OFL-Anton.txt": "licenses/OFL-Anton.txt",
+      "../assets/fonts/OFL-Inter.txt": "licenses/OFL-Inter.txt"
     },
     "fileAssociations": [
       {

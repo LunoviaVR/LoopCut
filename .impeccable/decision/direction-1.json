@@ -1,0 +1,123 @@
+{
+  "title": "Choose LoopCut's visual world",
+  "question": "The roll assigned Riso Meme Press. Keep it, take an alternate, or re-roll.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "Riso Meme Press",
+      "kicker": "THE ROLL",
+      "lineage": "riso-printed meme zines, xerox flyers and die-cut sticker sheets",
+      "thesis": "Every clip is pulled like a riso print: two spot inks, crop marks, and a neutral bed where the image is judged.",
+      "palette": ["#141312", "#1d1c1a", "#f2eee6", "#ff48b0", "#ffe800"],
+      "materials": ["two spot inks with 1px misregistration", "halftone screens", "printer's crop marks", "die-cut sticker chips"],
+      "viewport": "A neutral monitor bed fills the center ringed by pink crop marks; a numbered frame strip below; inspector sheets right with a yellow halftone size meter.",
+      "risk": "Tips into toy the moment the inks leave their functional roles (pink = cut and selection, yellow = output).",
+      "raised": [
+        { "from": "Design Annual Plate Section", "raise": "Only registration furniture frames regions: crop and registration marks and 1px hairlines, no rounded containers." },
+        { "from": "Ruled Reference Page", "raise": "States are printed marks: hairline at rest, ink-filled when pressed, struck through when disabled, bracketed on focus." },
+        { "from": "Star Atlas Chart", "raise": "Sizes ride one fixed halftone ramp: the export estimate's dot density is the file size." },
+        { "from": "Convention Circle Catalog", "raise": "The frame strip packs whole numbered cells edge to edge, never a partial thumbnail." }
+      ]
+    },
+    {
+      "id": "model-pick",
+      "label": "Instant Replay Suite",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "esports broadcast replay controllers and program monitors",
+      "thesis": "Clip the highlight like a replay operator: jog, cue in, cue out, roll.",
+      "palette": ["#0f1013", "#1b1d22", "#e9eaee", "#ff3b30", "#2bd576"],
+      "materials": ["jog-shuttle strip", "tally lights", "timecode burn-in", "safe-area guides"],
+      "viewport": "A program monitor with safe-area guides and burned-in timecode; cue buttons and a jog strip beneath; clip bank to the side.",
+      "risk": "The most familiar option here: close to the dark-NLE look most editors already ship."
+    },
+    {
+      "id": "challenger-exposure-record",
+      "label": "Darkroom Exposure Record",
+      "verdict": "competitive",
+      "lineage": "darkroom printers' exposure record cards and zone-system wedges",
+      "thesis": "The grade as an exposure card: an eleven-step zone ramp and stop deltas govern every tone.",
+      "palette": ["#0d0d0d", "#2b2b2b", "#7a7a7a", "#e9e6df", "#d13aa0"],
+      "materials": ["eleven-step zone ramp", "tracing-paper hatching", "dichroic magenta for filtration"],
+      "viewport": "The monitor under an enlarger glow; the grade panel is a zone wedge with stop deltas; trimmed ranges hatched on the strip.",
+      "case": "Fuses best with color grading and exposure; gamers and meme makers do not live in darkrooms.",
+      "risk": "Reads photographic-niche, and hatching can slow scanning of dense panels.",
+      "hero": "https://impeccable.style/worlds/cards/operate-b-exposure-record-zone-sheets-hero.webp"
+    },
+    {
+      "id": "challenger-departure-board",
+      "label": "Departure Board",
+      "verdict": "competitive",
+      "lineage": "boarding passes and live airport gate boards",
+      "thesis": "Exports as departures: every platform preset ranked live by whether this clip fits.",
+      "palette": ["#0e1116", "#1a2029", "#f4f4f0", "#ffb000"],
+      "materials": ["split-flap rows", "segmented pass stubs", "tabular figures"],
+      "viewport": "The monitor above a live board of Discord, X and Telegram rows with size-fit status; export settings as pass segments.",
+      "case": "Strongest at honest size control; travel culture is not the audience's world.",
+      "risk": "The board metaphor can crowd editing surfaces it does not serve.",
+      "hero": "https://impeccable.style/worlds/cards/vernacular-ephemera-boarding-pass-and-gate-board-hero.webp"
+    },
+    {
+      "id": "challenger-design-annual",
+      "label": "Design Annual Plate Section",
+      "verdict": "declined",
+      "lineage": "design annual plate pages on uncoated stock",
+      "thesis": "A gallery sheet with registration crosshairs at every plate corner.",
+      "palette": ["#f5f4f6", "#16181a", "#dcddf3", "#c9c7c4"],
+      "materials": ["uncoated near-white stock", "registration crosshairs", "letterpress stamp"],
+      "viewport": "One continuous light sheet with hairline-divided rows.",
+      "case": "Fuses poorly: a light gallery sheet fights the night-time grading surround and the audience.",
+      "kept": "Registration furniture and 1px hairline discipline.",
+      "risk": "Cold and editorial for a clipping tool."
+    },
+    {
+      "id": "challenger-ruled-reference",
+      "label": "Ruled Reference Page",
+      "verdict": "declined",
+      "lineage": "wide-margin scholarly editions with a centre rail",
+      "thesis": "Two columns around one moving rail of keys.",
+      "palette": ["#1a1a1a", "#efe9dc", "#c8381e"],
+      "materials": ["ruling-engine hairlines", "rubric vermilion"],
+      "viewport": "A small text block inside a wide annotation margin.",
+      "case": "Fuses poorly: a scholarly page has no place in clipping culture.",
+      "kept": "States drawn as printed marks.",
+      "risk": "Reads academic."
+    },
+    {
+      "id": "challenger-circle-catalog",
+      "label": "Convention Circle Catalog",
+      "verdict": "declined",
+      "lineage": "doujin convention catalogs on newsprint",
+      "thesis": "Thousands of stamp-size cells in a numbered grid, circled in biro.",
+      "palette": ["#111111", "#e8e4d8", "#3a7bd5"],
+      "materials": ["single-ink newsprint", "pen circles"],
+      "viewport": "A packed numbered thumbnail grid keyed to a hall map.",
+      "case": "Narrow miss: meme-adjacent but niche, and no clearer than the press.",
+      "kept": "Whole numbered frame cells packed edge to edge.",
+      "risk": "Too niche for gamers."
+    },
+    {
+      "id": "challenger-star-atlas",
+      "label": "Star Atlas Chart",
+      "verdict": "declined",
+      "lineage": "celestial atlases",
+      "thesis": "Magnitude as ranked dot size on a coordinate sphere.",
+      "palette": ["#0b1530", "#f4f1e6", "#ff6a3d"],
+      "materials": ["navy chart ground", "magnitude dots"],
+      "viewport": "Overlapping chart plates with a named-object index.",
+      "case": "Fuses poorly: the night sky says nothing about clipping.",
+      "kept": "One fixed magnitude ramp for sizes.",
+      "risk": "Decorative for an editor."
+    }
+  ],
+  "reroll": { "registers": ["safer", "bolder"] },
+  "canon": true,
+  "canonCard": {
+    "label": "The pro NLE standard",
+    "thesis": "What Resolve and Premiere ship, executed at full craft.",
+    "palette": ["#1e1f22", "#2b2d31", "#d9dadd", "#3d7eff"],
+    "materials": ["graphite panels", "dense icon toolbars"],
+    "viewport": "A centered program monitor, docked panels, blue selection.",
+    "risk": "Indistinguishable from every editor by design."
+  },
+  "steer": true
+}

@@ -21,7 +21,9 @@ pub enum ProjectError {
     Json(#[from] serde_json::Error),
     #[error("project file has no schemaVersion")]
     MissingVersion,
-    #[error("this project was saved by a newer LoopCut (schema {found}, this version supports {supported}); please update LoopCut")]
+    #[error(
+        "this project was saved by a newer LoopCut (schema {found}, this version supports {supported}); please update LoopCut"
+    )]
     NewerVersion { found: u32, supported: u32 },
     #[error("invalid project: {0}")]
     Invalid(String),
@@ -44,14 +46,17 @@ pub fn load(json: &str) -> Result<(Project, bool), ProjectError> {
         .and_then(Value::as_u64)
         .ok_or(ProjectError::MissingVersion)? as u32;
     if version > SCHEMA_VERSION {
-        return Err(ProjectError::NewerVersion { found: version, supported: SCHEMA_VERSION });
+        return Err(ProjectError::NewerVersion {
+            found: version,
+            supported: SCHEMA_VERSION,
+        });
     }
     if version == 0 {
         return Err(ProjectError::Invalid("schemaVersion must be >= 1".into()));
     }
     let migrated = version < SCHEMA_VERSION;
-    for step in (version as usize - 1)..(SCHEMA_VERSION as usize - 1) {
-        value = MIGRATIONS[step](value)?;
+    for migration in &MIGRATIONS[(version as usize - 1)..(SCHEMA_VERSION as usize - 1)] {
+        value = migration(value)?;
     }
     if let Some(obj) = value.as_object_mut() {
         obj.insert("schemaVersion".into(), Value::from(SCHEMA_VERSION));
@@ -71,7 +76,9 @@ fn looks_like_url(s: &str) -> bool {
     let lower = s.to_ascii_lowercase();
     match lower.split_once(':') {
         // Windows drive letters ("C:\...") are one character before the colon.
-        Some((scheme, _)) if scheme.len() > 1 => scheme.chars().all(|c| c.is_ascii_alphanumeric() || "+-.".contains(c)),
+        Some((scheme, _)) if scheme.len() > 1 => scheme
+            .chars()
+            .all(|c| c.is_ascii_alphanumeric() || "+-.".contains(c)),
         _ => false,
     }
 }
@@ -81,7 +88,9 @@ fn check_path(field: &str, path: &str) -> Result<(), ProjectError> {
         return Err(ProjectError::Invalid(format!("{field} is empty")));
     }
     if looks_like_url(path) || path.contains("://") {
-        return Err(ProjectError::Invalid(format!("{field} must be a local file path, not a URL")));
+        return Err(ProjectError::Invalid(format!(
+            "{field} must be a local file path, not a URL"
+        )));
     }
     if path.len() > 32 * 1024 {
         return Err(ProjectError::Invalid(format!("{field} is too long")));
@@ -109,7 +118,14 @@ pub fn validate(p: &Project) -> Result<(), ProjectError> {
         if clip.segments.iter().any(|s| !s.is_valid()) {
             return bad("a clip segment has an invalid time range");
         }
-        if clip.holds.len() > 10_000 || clip.holds.iter().any(|h| !(h.at.is_finite() && h.duration.is_finite() && h.duration >= 0.0 && h.duration <= 3600.0)) {
+        if clip.holds.len() > 10_000
+            || clip.holds.iter().any(|h| {
+                !(h.at.is_finite()
+                    && h.duration.is_finite()
+                    && h.duration >= 0.0
+                    && h.duration <= 3600.0)
+            })
+        {
             return bad("a clip has an invalid hold");
         }
     }
@@ -145,7 +161,9 @@ pub fn validate(p: &Project) -> Result<(), ProjectError> {
 pub fn relativize_paths(project: &mut Project, project_dir: &Path) {
     let rel = |p: &str| -> String {
         let path = Path::new(p);
-        relative_to(path, project_dir).map(|r| r.to_string_lossy().into_owned()).unwrap_or_else(|| p.to_string())
+        relative_to(path, project_dir)
+            .map(|r| r.to_string_lossy().into_owned())
+            .unwrap_or_else(|| p.to_string())
     };
     for clip in &mut project.clips {
         clip.path = rel(&clip.path);
@@ -159,7 +177,13 @@ pub fn relativize_paths(project: &mut Project, project_dir: &Path) {
 pub fn resolve_paths(project: &mut Project, project_dir: &Path) {
     let abs = |p: &str| -> String {
         let path = Path::new(p);
-        if path.is_absolute() { p.to_string() } else { normalize(&project_dir.join(path)).to_string_lossy().into_owned() }
+        if path.is_absolute() {
+            p.to_string()
+        } else {
+            normalize(&project_dir.join(path))
+                .to_string_lossy()
+                .into_owned()
+        }
     };
     for clip in &mut project.clips {
         clip.path = abs(&clip.path);
@@ -228,7 +252,9 @@ mod tests {
     #[test]
     fn roundtrip_preserves_unknown_fields() {
         let mut v: Value = serde_json::from_str(&save(&sample()).unwrap()).unwrap();
-        v.as_object_mut().unwrap().insert("futureFeature".into(), Value::from(42));
+        v.as_object_mut()
+            .unwrap()
+            .insert("futureFeature".into(), Value::from(42));
         let (p, migrated) = load(&v.to_string()).unwrap();
         assert!(!migrated);
         let again: Value = serde_json::from_str(&save(&p).unwrap()).unwrap();
@@ -239,7 +265,10 @@ mod tests {
     fn refuses_newer_schema() {
         let mut v: Value = serde_json::from_str(&save(&sample()).unwrap()).unwrap();
         v["schemaVersion"] = Value::from(SCHEMA_VERSION + 1);
-        assert!(matches!(load(&v.to_string()), Err(ProjectError::NewerVersion { .. })));
+        assert!(matches!(
+            load(&v.to_string()),
+            Err(ProjectError::NewerVersion { .. })
+        ));
     }
 
     #[test]

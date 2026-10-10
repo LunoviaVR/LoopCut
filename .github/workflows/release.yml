@@ -1,0 +1,90 @@
+# Release pipeline. A pushed tag vMAJOR.MINOR.PATCH builds the signed NSIS installer and the updater manifest
+# (latest.json) into a DRAFT GitHub release. Publish the draft only after a smoke test (see docs/releasing.md):
+# the updater endpoint releases/latest/download/latest.json only sees published, non-prerelease releases.
+#
+# workflow_dispatch runs a dry run. It also produces a draft release, so delete that draft when it is not needed.
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  # Never cancel a release that is already uploading assets.
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  release:
+    name: Build and draft Windows release
+    runs-on: windows-latest
+    timeout-minutes: 90
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js 24
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install Rust (stable)
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo build output
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install JavaScript dependencies
+        run: npm ci
+
+      - name: Cache pinned FFmpeg download
+        uses: actions/cache@v6
+        with:
+          path: .cache/ffmpeg
+          key: ffmpeg-windows-${{ hashFiles('scripts/ffmpeg.lock.json') }}
+
+      - name: Fetch and verify pinned FFmpeg
+        run: |
+          node scripts/fetch-ffmpeg.mjs
+          node scripts/verify-ffmpeg.mjs
+
+      # The updater only offers versions newer than the installed one, so a tag must match the app version exactly.
+      - name: Check the tag matches the app version
+        if: github.event_name == 'push'
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          if [ "${GITHUB_REF_NAME}" != "v${version}" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match package.json version v${version}."
+            exit 1
+          fi
+          echo "Tag ${GITHUB_REF_NAME} matches package.json version ${version}."
+
+      - name: Build, sign and draft the release
+        uses: tauri-apps/tauri-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        with:
+          # tauri-action replaces __VERSION__ with the version from tauri.conf.json (which reads package.json).
+          tagName: v__VERSION__
+          releaseName: LoopCut v__VERSION__
+          releaseBody: >-
+            Signed Windows installer and updater manifest (latest.json) attached.
+            Release notes: https://github.com/${{ github.repository }}/blob/${{ github.sha }}/CHANGELOG.md
+          releaseDraft: true
+          prerelease: false
+          uploadUpdaterJson: true
+          updaterJsonPreferNsis: true

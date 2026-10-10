@@ -1,12 +1,16 @@
-import { render, screen } from "@testing-library/react";
+import "@/ui/test/env";
+import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { App } from "./App";
 
 describe("App shell", () => {
-  it("renders the editor regions", () => {
+  it("renders the editor regions and the wordmark", () => {
     render(<App />);
-    expect(screen.getByText("LoopCut")).toBeInTheDocument();
-    expect(screen.getByLabelText("Preview")).toBeInTheDocument();
-    expect(screen.getByLabelText("Timeline")).toBeInTheDocument();
+
+    expect(within(screen.getByRole("banner")).getByText("LoopCut")).toBeInTheDocument();
+    expect(screen.getByRole("tablist", { name: "Tools" })).toBeInTheDocument();
+    expect(screen.getByRole("main", { name: "Monitor" })).toBeInTheDocument();
+    expect(screen.getByRole("complementary", { name: "Inspector" })).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Timeline" })).toBeInTheDocument();
   });
 });

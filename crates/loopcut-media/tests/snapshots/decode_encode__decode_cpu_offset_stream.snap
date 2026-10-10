@@ -1,0 +1,38 @@
+---
+source: crates/loopcut-media/tests/decode_encode.rs
+expression: decode_args(&req)
+---
+[
+    "-hide_banner",
+    "-loglevel",
+    "error",
+    "-nostdin",
+    "-progress",
+    "pipe:2",
+    "-nostats",
+    "-ss",
+    "10.500000",
+    "-seek_timestamp",
+    "1",
+    "-protocol_whitelist",
+    "file,pipe",
+    "-noautorotate",
+    "-i",
+    "C:\\clips\\input.mp4",
+    "-map",
+    "0:0",
+    "-an",
+    "-sn",
+    "-dn",
+    "-t",
+    "1.000000",
+    "-vf",
+    "crop=1280:720:320:180:exact=1,scale=640:360:flags=lanczos,fps=30:round=up:start_time=0,format=nv12",
+    "-fps_mode",
+    "cfr",
+    "-f",
+    "rawvideo",
+    "-pix_fmt",
+    "nv12",
+    "pipe:1",
+]

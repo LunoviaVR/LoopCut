@@ -6,7 +6,16 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": ["**", "!src/ipc/bindings", "!src-tauri/gen", "!dist", "!target"]
+    "includes": [
+      "**",
+      "!src/ipc/bindings",
+      "!src-tauri/gen",
+      "!dist",
+      "!target",
+      "!.claude",
+      "!.impeccable",
+      "!crates/*/tests/fixtures"
+    ]
   },
   "formatter": {
     "enabled": true,

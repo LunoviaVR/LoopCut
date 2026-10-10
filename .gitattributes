@@ -1,0 +1,10 @@
+# Text files are LF in the repository and in every checkout, whatever core.autocrlf says, so Biome and rustfmt see
+# the same bytes on every machine.
+* text=auto eol=lf
+
+*.png binary
+*.ico binary
+*.icns binary
+*.ttf binary
+*.mp4 binary
+*.gif binary

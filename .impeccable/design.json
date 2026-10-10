@@ -1,0 +1,549 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-10T20:56:39.411Z",
+  "title": "Design System: LoopCut",
+  "extensions": {
+    "colorMeta": {
+      "app": {
+        "role": "neutral",
+        "displayName": "Graphite Base",
+        "canonical": "#141518",
+        "tonalRamp": [
+          "#0a0b0e",
+          "#242528",
+          "#414245",
+          "#606165",
+          "#818286",
+          "#a3a5a9",
+          "#c7c9cd",
+          "#edeef3"
+        ]
+      },
+      "panel": {
+        "role": "neutral",
+        "displayName": "Panel Graphite",
+        "canonical": "#1b1c20",
+        "tonalRamp": [
+          "#0a0b0f",
+          "#242529",
+          "#414246",
+          "#606166",
+          "#818287",
+          "#a3a5aa",
+          "#c7c9ce",
+          "#edeef4"
+        ]
+      },
+      "raised": {
+        "role": "neutral",
+        "displayName": "Raised Graphite",
+        "canonical": "#23252a",
+        "tonalRamp": [
+          "#090b0f",
+          "#23252a",
+          "#404247",
+          "#5f6167",
+          "#808288",
+          "#a2a5ab",
+          "#c6c9d0",
+          "#eceef5"
+        ]
+      },
+      "overlay": {
+        "role": "neutral",
+        "displayName": "Overlay Graphite",
+        "canonical": "#2c2f35",
+        "tonalRamp": [
+          "#090b10",
+          "#22252b",
+          "#3f4248",
+          "#5e6168",
+          "#7f828a",
+          "#a1a5ad",
+          "#c5c9d1",
+          "#ebeff7"
+        ]
+      },
+      "hover": {
+        "role": "neutral",
+        "displayName": "Hover Graphite",
+        "canonical": "#2a2c31",
+        "tonalRamp": [
+          "#090b0f",
+          "#23252a",
+          "#404247",
+          "#5f6167",
+          "#808288",
+          "#a2a5ab",
+          "#c6c9d0",
+          "#eceef5"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#2f3238",
+        "tonalRamp": [
+          "#090b10",
+          "#22252b",
+          "#3f4248",
+          "#5e6168",
+          "#7f8289",
+          "#a1a5ac",
+          "#c5c9d1",
+          "#ebeff6"
+        ]
+      },
+      "line-strong": {
+        "role": "neutral",
+        "displayName": "Strong Hairline",
+        "canonical": "#3b3f46",
+        "tonalRamp": [
+          "#080b11",
+          "#22252c",
+          "#3e4249",
+          "#5d6169",
+          "#7e838a",
+          "#a0a5ae",
+          "#c4c9d2",
+          "#eaeff8"
+        ]
+      },
+      "line-control": {
+        "role": "neutral",
+        "displayName": "Control Edge",
+        "canonical": "#767a83",
+        "tonalRamp": [
+          "#080b11",
+          "#22252c",
+          "#3e424a",
+          "#5d616a",
+          "#7e828b",
+          "#a1a5af",
+          "#c5c9d3",
+          "#eaeef9"
+        ]
+      },
+      "preview": {
+        "role": "neutral",
+        "displayName": "Preview Bed",
+        "canonical": "#0b0b0c",
+        "tonalRamp": [
+          "#0b0b0c",
+          "#252526",
+          "#424243",
+          "#616162",
+          "#828283",
+          "#a5a5a6",
+          "#c9c9ca",
+          "#eeeef0"
+        ]
+      },
+      "fg": {
+        "role": "neutral",
+        "displayName": "Foreground",
+        "canonical": "#ececef",
+        "tonalRamp": [
+          "#0b0b0d",
+          "#252527",
+          "#424244",
+          "#616163",
+          "#828285",
+          "#a5a5a7",
+          "#c9c9cc",
+          "#eeeef1"
+        ]
+      },
+      "fg-muted": {
+        "role": "neutral",
+        "displayName": "Muted Text",
+        "canonical": "#a3a7b0",
+        "tonalRamp": [
+          "#090b11",
+          "#22252c",
+          "#3f424a",
+          "#5e6169",
+          "#7e828b",
+          "#a1a5ae",
+          "#c5c9d2",
+          "#eaeef8"
+        ]
+      },
+      "fg-subtle": {
+        "role": "neutral",
+        "displayName": "Subtle Text",
+        "canonical": "#6f737c",
+        "tonalRamp": [
+          "#080b11",
+          "#22252c",
+          "#3e424a",
+          "#5d616a",
+          "#7e828b",
+          "#a1a5af",
+          "#c5c9d3",
+          "#eaeef9"
+        ]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Azure",
+        "canonical": "#3d7eff",
+        "tonalRamp": [
+          "#000039",
+          "#001b62",
+          "#00349f",
+          "#1554d2",
+          "#3979fa",
+          "#73a3ff",
+          "#adcafe",
+          "#e6efff"
+        ]
+      },
+      "accent-hover": {
+        "role": "primary",
+        "displayName": "Azure Hover",
+        "canonical": "#5a92ff",
+        "tonalRamp": [
+          "#000038",
+          "#001b63",
+          "#03369b",
+          "#2659c1",
+          "#477de8",
+          "#73a3ff",
+          "#adcafe",
+          "#e7effe"
+        ]
+      },
+      "accent-press": {
+        "role": "primary",
+        "displayName": "Azure Press",
+        "canonical": "#2f68dc",
+        "tonalRamp": [
+          "#000039",
+          "#001b63",
+          "#0033a1",
+          "#1f57c9",
+          "#407bf1",
+          "#73a3ff",
+          "#adcafe",
+          "#e7effe"
+        ]
+      },
+      "accent-fg": {
+        "role": "primary",
+        "displayName": "White On Azure",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#a5a5a5",
+          "#c9c9c9",
+          "#eeeeee"
+        ]
+      },
+      "ok": {
+        "role": "state",
+        "displayName": "Ready Green",
+        "canonical": "#33c481",
+        "tonalRamp": [
+          "#001005",
+          "#002e19",
+          "#00502f",
+          "#007447",
+          "#049b61",
+          "#2fc17f",
+          "#5fe7a2",
+          "#c3ffdb"
+        ]
+      },
+      "warn": {
+        "role": "state",
+        "displayName": "Caution Amber",
+        "canonical": "#f2b84b",
+        "tonalRamp": [
+          "#130900",
+          "#332100",
+          "#573c01",
+          "#7f5901",
+          "#a97800",
+          "#d29a23",
+          "#f8be52",
+          "#ffeccd"
+        ]
+      },
+      "danger": {
+        "role": "state",
+        "displayName": "Failure Red",
+        "canonical": "#ff5c5c",
+        "tonalRamp": [
+          "#200001",
+          "#4d0007",
+          "#800114",
+          "#b70121",
+          "#e13e43",
+          "#ff726e",
+          "#ffb2ad",
+          "#ffe9e6"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Drop prompt in the import overlay; the only text above 14px."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Dialog titles and panel titles, such as the inspector tool name and the timeline title."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Section headings, medium buttons, toast titles and compact empty-state titles."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Values in fields and rows, switch labels, dialog and settings text."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Field and number field labels, hints, tooltips, segmented items, small buttons, toast descriptions, the monitor readout and export progress lines."
+      },
+      "micro": {
+        "displayName": "Micro",
+        "purpose": "Badge text, key caps, tool rail names, timeline ruler labels and the colour wheel readout."
+      }
+    },
+    "shadows": [
+      {
+        "name": "tooltip",
+        "value": "0 6px 18px rgb(0 0 0 / 0.45)",
+        "purpose": "Hover and focus hints. Token shadow-tooltip."
+      },
+      {
+        "name": "popover",
+        "value": "0 8px 24px rgb(0 0 0 / 0.45)",
+        "purpose": "Select lists, the monitor zoom menu and the caption controls popover. Token shadow-popover."
+      },
+      {
+        "name": "toast",
+        "value": "0 12px 32px rgb(0 0 0 / 0.45)",
+        "purpose": "Toasts and the update banner. Token shadow-toast."
+      },
+      {
+        "name": "overlay",
+        "value": "0 18px 48px rgb(0 0 0 / 0.5)",
+        "purpose": "Modal dialogs over the app scrim. Token shadow-overlay."
+      },
+      {
+        "name": "readout",
+        "value": "0 4px 12px rgb(0 0 0 / 0.4)",
+        "purpose": "Timeline drag readout above the trim grips. Token shadow-readout."
+      },
+      {
+        "name": "selection-ring",
+        "value": "inset 0 0 0 1px var(--color-accent)",
+        "purpose": "Not elevation: the selected look drawn as an inset outline."
+      },
+      {
+        "name": "knockout-ring",
+        "value": "0 0 0 2px var(--color-panel)",
+        "purpose": "Not elevation: slider thumb knockout. The selected HSL swatch uses 0 0 0 1px panel."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-quick",
+        "value": "cubic-bezier(0.2, 0.7, 0.2, 1)",
+        "purpose": "Default easing for chrome state changes."
+      },
+      {
+        "name": "duration-chrome",
+        "value": "150ms",
+        "purpose": "Colour, background and transform changes on buttons, tabs, the switch thumb, slider thumbs and the section chevron."
+      },
+      {
+        "name": "duration-progress",
+        "value": "200ms",
+        "purpose": "Determinate progress bar width transition."
+      },
+      {
+        "name": "indeterminate",
+        "value": "1.3s",
+        "purpose": "Indeterminate progress slide, infinite. Stopped by reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "inspector-open",
+        "value": "1120px",
+        "purpose": "The inspector is open at this width and wider; at 1119px and below it starts collapsed."
+      },
+      {
+        "name": "window-default",
+        "value": "1440px x 900px",
+        "purpose": "Default window size in src-tauri/tauri.conf.json."
+      },
+      {
+        "name": "window-minimum",
+        "value": "1024px x 640px",
+        "purpose": "Minimum window size in src-tauri/tauri.conf.json."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one azure action on a surface, graphite label, 28px high.",
+      "html": "<button class=\"ds-btn-primary\" type=\"button\">Export GIF</button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:28px;padding:0 12px;border:0;border-radius:6px;background:var(--color-accent);color:var(--color-app);font:500 13px/1.4 var(--font-sans);cursor:pointer;transition:background-color 150ms cubic-bezier(0.2,0.7,0.2,1),color 150ms cubic-bezier(0.2,0.7,0.2,1);} .ds-btn-primary:hover{background:var(--color-accent-hover);} .ds-btn-primary:active{background:var(--color-accent-press);color:var(--color-accent-fg);} .ds-btn-primary:focus-visible{outline:2px solid var(--color-accent);outline-offset:1px;} .ds-btn-primary:disabled{opacity:.4;pointer-events:none;}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Raised fill with a hairline border for everyday actions.",
+      "html": "<button class=\"ds-btn-secondary\" type=\"button\">Choose folder</button>",
+      "css": ".ds-btn-secondary{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:28px;padding:0 12px;border:1px solid var(--color-line);border-radius:6px;background:var(--color-raised);color:var(--color-fg);font:500 13px/1.4 var(--font-sans);cursor:pointer;transition:background-color 150ms cubic-bezier(0.2,0.7,0.2,1),border-color 150ms cubic-bezier(0.2,0.7,0.2,1);} .ds-btn-secondary:hover{background:var(--color-overlay);border-color:var(--color-line-strong);} .ds-btn-secondary:active{background:var(--color-hover);} .ds-btn-secondary:focus-visible{outline:2px solid var(--color-accent);outline-offset:1px;} .ds-btn-secondary:disabled{opacity:.4;pointer-events:none;}"
+    },
+    {
+      "name": "Icon Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Ghost 28px icon control; the pressed state takes the selected look: accent wash, foreground icon and an accent inset ring.",
+      "html": "<button class=\"ds-icon-btn\" type=\"button\" aria-label=\"Play\"><svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 4.5v15l12-7.5z\"/></svg></button>",
+      "css": ".ds-icon-btn{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;padding:0;border:0;border-radius:6px;background:transparent;color:var(--color-fg-muted);cursor:pointer;transition:background-color 150ms cubic-bezier(0.2,0.7,0.2,1),color 150ms cubic-bezier(0.2,0.7,0.2,1);} .ds-icon-btn:hover{background:var(--color-hover);color:var(--color-fg);} .ds-icon-btn:active{background:var(--color-raised);} .ds-icon-btn[aria-pressed=\"true\"]{background:var(--color-accent-soft);color:var(--color-fg);box-shadow:inset 0 0 0 1px var(--color-accent);} .ds-icon-btn:focus-visible{outline:2px solid var(--color-accent);outline-offset:1px;} .ds-icon-btn:disabled{opacity:.4;pointer-events:none;}"
+    },
+    {
+      "name": "Tool Tile",
+      "kind": "nav",
+      "refersTo": "tool-tab",
+      "description": "A 48px rail tile: a 16px icon over an 11px name. The selected tile takes the selected look with an accent icon.",
+      "html": "<button class=\"ds-tool-tab\" type=\"button\" role=\"tab\" aria-selected=\"true\" aria-label=\"Trim\"><svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"6\" cy=\"6\" r=\"3\"/><path d=\"M8.12 8.12 12 12\"/><path d=\"M20 4 8.12 15.88\"/><circle cx=\"6\" cy=\"18\" r=\"3\"/><path d=\"M14.8 14.8 20 20\"/></svg><span>Trim</span></button>",
+      "css": ".ds-tool-tab{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;width:48px;height:48px;padding:0;border:0;border-radius:6px;background:transparent;color:var(--color-fg-muted);font:400 11px/1 var(--font-sans);cursor:pointer;transition:background-color 150ms cubic-bezier(0.2,0.7,0.2,1),color 150ms cubic-bezier(0.2,0.7,0.2,1);} .ds-tool-tab:hover{background:var(--color-hover);color:var(--color-fg);} .ds-tool-tab[aria-selected=\"true\"]{background:var(--color-accent-soft);color:var(--color-fg);box-shadow:inset 0 0 0 1px var(--color-accent);} .ds-tool-tab[aria-selected=\"true\"]:hover{background:var(--color-accent-soft);} .ds-tool-tab[aria-selected=\"true\"] svg{color:var(--color-accent);} .ds-tool-tab:focus-visible{outline:2px solid var(--color-accent);outline-offset:1px;}"
+    },
+    {
+      "name": "Badge Ok",
+      "kind": "chip",
+      "refersTo": "badge-ok",
+      "description": "A status fact at 18px high: a 15 percent green tint with green text.",
+      "html": "<span class=\"ds-badge-ok\">Fits</span>",
+      "css": ".ds-badge-ok{display:inline-flex;align-items:center;height:18px;padding:0 6px;border-radius:6px;background:rgb(51 196 129 / 0.15);color:var(--color-ok);font:500 11px/1 var(--font-sans);font-variant-numeric:tabular-nums;white-space:nowrap;}"
+    },
+    {
+      "name": "Panel",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "A graphite tile with a 32px hairline header and a 14px semibold title; the body is the scroll container and has no padding of its own.",
+      "html": "<section class=\"ds-panel\"><header class=\"ds-panel-header\">Inspector</header><div class=\"ds-panel-body\">Section content</div></section>",
+      "css": ".ds-panel{display:flex;flex-direction:column;min-height:0;overflow:hidden;border-radius:8px;background:var(--color-panel);color:var(--color-fg);font:400 13px/1.4 var(--font-sans);} .ds-panel-header{display:flex;align-items:center;height:32px;padding:0 6px 0 12px;border-bottom:1px solid var(--color-line);color:var(--color-fg);font:600 14px/1.4 var(--font-sans);} .ds-panel-body{flex:1;min-height:0;overflow:auto;padding:0;color:var(--color-fg-muted);}"
+    },
+    {
+      "name": "Switch",
+      "kind": "input",
+      "description": "A 28 x 16 on/off track on a 1px control edge; on is accent with a graphite thumb.",
+      "html": "<div class=\"ds-switch\"><span class=\"ds-switch-label\">Limit file size</span><button class=\"ds-switch-track\" type=\"button\" role=\"switch\" aria-checked=\"true\" aria-label=\"Limit file size\"><span class=\"ds-switch-thumb\"></span></button></div>",
+      "css": ".ds-switch{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;min-height:32px;padding:4px 0;font:400 13px/1.4 var(--font-sans);color:var(--color-fg);} .ds-switch-track{position:relative;flex:none;box-sizing:border-box;width:28px;height:16px;margin-top:2px;padding:0;border:1px solid var(--color-line-control);border-radius:999px;background:var(--color-raised);cursor:pointer;transition:background-color 150ms cubic-bezier(0.2,0.7,0.2,1),border-color 150ms cubic-bezier(0.2,0.7,0.2,1);} .ds-switch-track:hover{border-color:var(--color-fg-muted);} .ds-switch-track[aria-checked=\"true\"]{background:var(--color-accent);border-color:var(--color-accent);} .ds-switch-thumb{position:absolute;top:1px;left:1px;width:12px;height:12px;border-radius:999px;background:var(--color-fg-muted);transition:transform 150ms cubic-bezier(0.2,0.7,0.2,1);} .ds-switch-track[aria-checked=\"true\"] .ds-switch-thumb{transform:translateX(13px);background:var(--color-app);} .ds-switch-track:focus-visible{outline:2px solid var(--color-accent);outline-offset:1px;}"
+    },
+    {
+      "name": "Number Field",
+      "kind": "input",
+      "refersTo": "number-field",
+      "description": "A 28px value box on raised fill with a 1px control edge; a right-aligned tabular value, an accent edge on focus.",
+      "html": "<div class=\"ds-number\"><input class=\"ds-number-input\" type=\"text\" inputmode=\"decimal\" value=\"1.00\" aria-label=\"Speed\"><span class=\"ds-number-unit\">x</span></div>",
+      "css": ".ds-number{display:flex;align-items:center;gap:4px;box-sizing:border-box;width:80px;height:28px;padding:0 8px;border:1px solid var(--color-line-control);border-radius:6px;background:var(--color-raised);} .ds-number:hover{border-color:var(--color-fg-muted);} .ds-number:focus-within{border-color:var(--color-accent);outline:2px solid var(--color-accent);outline-offset:1px;} .ds-number-input{flex:1;min-width:0;border:0;background:transparent;color:var(--color-fg);font:400 13px/1.4 var(--font-sans);font-variant-numeric:tabular-nums;text-align:right;outline:none;} .ds-number-unit{font:400 12px/1.4 var(--font-sans);color:var(--color-fg-muted);}"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "custom",
+      "description": "Exactly-one choice in a raised track; the selected item takes the selected look and one value is always set.",
+      "html": "<div class=\"ds-seg\" role=\"group\" aria-label=\"Direction\"><button class=\"ds-seg-item\" type=\"button\" aria-pressed=\"true\">Forward</button><button class=\"ds-seg-item\" type=\"button\" aria-pressed=\"false\">Reverse</button><button class=\"ds-seg-item\" type=\"button\" aria-pressed=\"false\">Ping-pong</button></div>",
+      "css": ".ds-seg{display:inline-flex;align-items:center;gap:1px;box-sizing:border-box;padding:2px;border:1px solid var(--color-line);border-radius:6px;background:var(--color-raised);} .ds-seg-item{display:inline-flex;align-items:center;justify-content:center;gap:4px;height:24px;padding:0 8px;border:0;border-radius:4px;background:transparent;color:var(--color-fg-muted);font:400 12px/1 var(--font-sans);white-space:nowrap;cursor:pointer;transition:background-color 150ms cubic-bezier(0.2,0.7,0.2,1),color 150ms cubic-bezier(0.2,0.7,0.2,1);} .ds-seg-item:hover{background:var(--color-hover);color:var(--color-fg);} .ds-seg-item:active{background:var(--color-overlay);} .ds-seg-item[aria-pressed=\"true\"]{background:var(--color-accent-soft);color:var(--color-fg);box-shadow:inset 0 0 0 1px var(--color-accent);} .ds-seg-item:focus-visible{outline:2px solid var(--color-accent);outline-offset:1px;}"
+    },
+    {
+      "name": "Slider",
+      "kind": "input",
+      "description": "A 24px hit height over a 4px neutral track; the fill runs from the minimum, or from zero for a range that crosses it; a 12px foreground thumb with a panel knockout ring.",
+      "html": "<div class=\"ds-slider\"><div class=\"ds-slider-track\"><span class=\"ds-slider-fill\" style=\"left:0;width:24%\"></span></div><span class=\"ds-slider-thumb\" style=\"left:24%\"></span></div>",
+      "css": ".ds-slider{position:relative;width:100%;height:24px;} .ds-slider-track{position:absolute;left:0;right:0;top:50%;height:4px;margin-top:-2px;border-radius:999px;background:var(--color-raised);overflow:hidden;} .ds-slider-fill{position:absolute;top:0;bottom:0;background:var(--color-fg-muted);} .ds-slider-thumb{position:absolute;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:999px;background:var(--color-fg);box-shadow:0 0 0 2px var(--color-panel);transition:background-color 150ms cubic-bezier(0.2,0.7,0.2,1);} .ds-slider:hover .ds-slider-thumb{background:var(--color-accent-hover);} .ds-slider:active .ds-slider-thumb{background:var(--color-accent-press);} .ds-slider:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px;}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Honest Monitor",
+    "overview": [
+      "LoopCut is a pro editor for turning video into GIF loops. The monitor is the largest thing on screen and the only place colour is judged, so everything around it stays quiet: graphite chrome in three fills, 1px hairlines, and one azure accent. The chrome is dense on purpose, with 11 to 14px type, 28px controls and 32px panel headers, because the user works fast and repeatedly.",
+      "The personality is serious and fast with a playful edge. The edge lives in the loop mark (two arc strokes, one azure and one in the foreground colour), in the GIF vocabulary (loop, ping-pong, dither) and in the copy. The chrome itself does not decorate.",
+      "The system refuses the generic web-dashboard look: no card grids, no marketing chrome and no oversized type, as set in the confirmed editor brief. The app is dark only. The page declares `color-scheme: dark` and no light tokens exist.",
+      "Product principles this system serves: the neutral bed keeps preview and export honest (PRODUCT principle 1); tabular sizes and fps show real output values (principle 3); dense rows and presets keep pro depth out of the way (principle 4)."
+    ],
+    "keyCharacteristics": [
+      "Preview-dominant: the monitor takes the remaining width and the timeline is one compact dock.",
+      "Three graphite fills and one hairline; depth comes from fill steps, not shadows on tiles.",
+      "One accent (azure, #3d7eff) for action, selection, the playhead and focus.",
+      "Green, amber and red appear only as state.",
+      "Tabular numerals for every value that changes: timecode, size, fps and field values.",
+      "Keyboard first: every control has a visible focus ring, and shortcuts appear in tooltips."
+    ],
+    "rules": [
+      {
+        "name": "The One Accent Rule",
+        "body": "Azure marks only what can be acted on, what is selected, the playhead and focus. It is never decoration and never a second brand colour. The exceptions in the code are listed under Azure; each one is a decision to keep, not a pattern to copy.",
+        "section": "colors"
+      },
+      {
+        "name": "The Neutral Bed Rule",
+        "body": "The monitor and the timeline canvas stay #0b0b0c with no tint. Overlays may dim the bed with graphite, never colour it. Colour judgement happens on the bed.",
+        "section": "colors"
+      },
+      {
+        "name": "The Small Chrome Rule",
+        "body": "Editor chrome is set at 11 to 16px. Nothing above 16px appears in the chrome, and weight stops at 600.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Rule",
+        "body": "Any number that changes while editing (timecode, sizes, fps, frame counts, field values, ruler labels) uses tabular figures through the `tabular` class. Number fields right-align their values.",
+        "section": "typography"
+      },
+      {
+        "name": "The Float Rule",
+        "body": "Only layers above the page cast shadows. Tiles, rows and controls separate by fill step and hairline. The selection ring is an inset outline, not depth.",
+        "section": "elevation-depth"
+      },
+      {
+        "name": "The Canonical Selection Rule",
+        "body": "A selected chip, toggle, tab or tile takes one look: an accent wash, foreground text and a 1px accent inset ring, with the accent icon where the item has one. `selectedFillClass` in `src/ui/selected.ts` is the conditional class and `selectedChipClass` is the same look driven by aria-pressed. Selection never shows as weight or a second hue. The HSL swatch is the one exception: a foreground edge with a 1px panel knockout, so the swatch colour stays visible.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "Do use the token classes (`bg-panel`, `text-fg-muted`, `border-line`, `border-line-control`, `rounded-control`) defined in `src/styles/globals.css`. Chrome colours appear as hex only in `src/styles/globals.css` and as the fallback palette in `src/features/timeline/draw.ts`, which reads the same tokens at run time. Caption and grade colours are user data.",
+      "Do give each surface one primary action, styled azure with a graphite label.",
+      "Do show every changing number with tabular figures and real output values, including GIF fps after centisecond rounding.",
+      "Do put a tooltip on every icon-only button, with its shortcut where one exists, and a visible name on every text control. The monitor zoom trigger is the one documented exception.",
+      "Do show selection with the Canonical Selection look: an accent wash, foreground text and a 1px accent inset ring, or an accent icon.",
+      "Do keep the monitor bed and the timeline canvas at #0b0b0c, untinted.",
+      "Do reuse the existing primitives in `@/ui` and an existing shadow token for a role before adding a new one.",
+      "Do style destructive confirms as danger and place them left of the primary action.",
+      "Do fill slider tracks with the neutral muted-text colour, never accent."
+    ],
+    "donts": [
+      "Don't tint the preview bed, the timeline canvas or any overlay with a colour.",
+      "Don't use `fg-subtle` for text, placeholders or hints. Use `fg-muted`.",
+      "Don't put white text on the azure fill at rest (3.7:1). The label is graphite; only the pressed state turns white.",
+      "Don't add a second accent, CSS gradients or gradient text. The UI code defines no gradients today.",
+      "Don't shadow tiles, rows or inline controls. Shadows are for floating layers only.",
+      "Don't set type above 16px in the chrome, or add a second typeface for display.",
+      "Don't colour a single border side (for example a left accent bar) on cards, rows or callouts.",
+      "Don't use emoji or Unicode symbols as icons. Use Lucide icons at 16px with 1.5px stroke.",
+      "Don't use a modal for a message that does not block. The update banner is the model.",
+      "Don't add card grids or nested cards to the inspector. Use sections and fields.",
+      "Don't add accent to a new surface beyond the four roles. The current exceptions are listed under Azure, and a new one needs its own decision first.",
+      "Don't add a light theme one role at a time. The app is dark only today, so a light theme needs every role's light value at once."
+    ]
+  }
+}

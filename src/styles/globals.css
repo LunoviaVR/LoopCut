@@ -1,30 +1,83 @@
 @import "tailwindcss";
 
-/* LoopCut design tokens. Neutral surfaces keep color judgment honest around the preview. */
+/*
+ * LoopCut design tokens — the video-editor standard at CapCut-desktop craft:
+ * graphite surfaces in three steps, 1px hairlines, one azure accent for action/selection/focus,
+ * semantic colors only for state. The preview bed stays neutral so color judgment is honest.
+ */
 @theme {
-  --color-bg: #0e0f11;
-  --color-panel: #15161a;
-  --color-raised: #1c1e23;
-  --color-overlay: #24272d;
-  --color-line: #2a2d34;
-  --color-line-strong: #3a3e47;
-  --color-fg: #e9eaee;
-  --color-fg-muted: #a1a6b1;
-  --color-fg-subtle: #6f7480;
-  --color-accent: #ff6a3d;
-  --color-accent-strong: #ff8a63;
-  --color-accent-fg: #160803;
-  --color-ok: #4ccf8a;
+  /* Surfaces */
+  --color-app: #141518;
+  --color-panel: #1b1c20;
+  --color-raised: #23252a;
+  --color-overlay: #2c2f35;
+  --color-hover: #2a2c31;
+  --color-line: #2f3238;
+  --color-line-strong: #3b3f46;
+  /*
+   * Resting edge of a control (inputs, selects, switch tracks). Contrast for WCAG 1.4.11 (3:1):
+   * 3.6:1 on raised #23252a, 4.0:1 on panel #1b1c20 and 3.1:1 on overlay #2c2f35 (controls inside dialogs).
+   * Hover moves to fg-muted, focus to accent.
+   */
+  --color-line-control: #767a83;
+  --color-preview: #0b0b0c;
+
+  /* Text. Placeholders and hints use fg-muted (6.4:1 on raised); fg-subtle is decoration only. */
+  --color-fg: #ececef;
+  --color-fg-muted: #a3a7b0;
+  --color-fg-subtle: #6f737c;
+
+  /* Accent: primary action, selection, playhead head, focus */
+  --color-accent: #3d7eff;
+  --color-accent-hover: #5a92ff;
+  --color-accent-press: #2f68dc;
+  --color-accent-fg: #ffffff;
+  --color-accent-soft: rgb(61 126 255 / 0.16);
+
+  /* State */
+  --color-ok: #33c481;
   --color-warn: #f2b84b;
-  --color-danger: #ff5d6c;
-  --color-preview: #0a0a0b;
+  --color-danger: #ff5c5c;
 
-  --font-sans: "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", "Cascadia Mono", "Consolas", ui-monospace, monospace;
+  --font-sans: "Segoe UI Variable Text", "Segoe UI", "Inter", system-ui, sans-serif;
+  --font-mono: "Cascadia Mono", "Consolas", ui-monospace, monospace;
 
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 10px;
+  /*
+   * Type scale (Tailwind sizes are remapped): 2xs 11px micro labels and key caps, xs 12px captions, field
+   * labels and hints, sm 13px body and values, base 14px panel and dialog titles, lg 16px headline.
+   * Hierarchy: panel title base semibold; section and settings headings sm medium; values sm, tabular.
+   */
+  --text-2xs: 0.6875rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.875rem;
+  --text-lg: 1rem;
+  --text-xl: 1.25rem;
+
+  --radius-chip: 4px;
+  --radius-control: 6px;
+  --radius-panel: 8px;
+  --radius-dialog: 10px;
+
+  /* Elevation: only layers above the page cast a shadow (DESIGN.md, Elevation). */
+  --shadow-tooltip: 0 6px 18px rgb(0 0 0 / 0.45);
+  --shadow-popover: 0 8px 24px rgb(0 0 0 / 0.45);
+  --shadow-toast: 0 12px 32px rgb(0 0 0 / 0.45);
+  --shadow-overlay: 0 18px 48px rgb(0 0 0 / 0.5);
+  --shadow-readout: 0 4px 12px rgb(0 0 0 / 0.4);
+
+  --ease-out-quick: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  --animate-indeterminate: indeterminate 1.3s var(--ease-out-quick) infinite;
+
+  @keyframes indeterminate {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(300%);
+    }
+  }
 }
 
 @layer base {
@@ -36,10 +89,10 @@
 
   body {
     margin: 0;
-    background: var(--color-bg);
+    background: var(--color-app);
     color: var(--color-fg);
     font-family: var(--font-sans);
-    font-size: 13px;
+    font-size: var(--text-sm);
     line-height: 1.4;
     -webkit-font-smoothing: antialiased;
     user-select: none;
@@ -50,6 +103,7 @@
   textarea,
   [contenteditable="true"] {
     user-select: text;
+    caret-color: var(--color-accent);
   }
 
   :focus-visible {
@@ -57,7 +111,84 @@
     outline-offset: 1px;
   }
 
+  /* Windows High Contrast drops background and box-shadow, so selected and pressed states need an outline. */
+  @media (forced-colors: active) {
+    [aria-selected="true"],
+    [aria-pressed="true"],
+    [data-state="on"],
+    [data-state="checked"] {
+      outline: 2px solid CanvasText;
+      outline-offset: -2px;
+    }
+
+    /* Floating surfaces lose their overlay fill and shadow in High Contrast, so they keep a 1px edge. */
+    [role="dialog"],
+    [role="listbox"],
+    [role="tooltip"] {
+      outline: 1px solid CanvasText;
+    }
+
+    :focus-visible {
+      outline-color: Highlight;
+    }
+
+    canvas {
+      forced-color-adjust: none;
+    }
+  }
+
   ::selection {
-    background: color-mix(in srgb, var(--color-accent) 40%, transparent);
+    background: var(--color-accent-soft);
+  }
+
+  /* Placeholder text is fg-muted, not the browser's faded default. */
+  ::placeholder {
+    color: var(--color-fg-muted);
+    opacity: 1;
+  }
+
+  /* Native controls and scrollbars follow the graphite surfaces, not the OS theme. */
+  :root {
+    color-scheme: dark;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-line-strong) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-line-strong);
+    border: 2px solid transparent;
+    background-clip: content-box;
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-fg-subtle);
+    background-clip: content-box;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Reduced motion must win over component transitions, so the important flag is deliberate here. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      /* biome-ignore lint/complexity/noImportantStyles: reduced-motion override must beat component transitions */
+      transition-duration: 0.01ms !important;
+      /* biome-ignore lint/complexity/noImportantStyles: reduced-motion override must beat component transitions */
+      animation-duration: 0.01ms !important;
+    }
   }
 }

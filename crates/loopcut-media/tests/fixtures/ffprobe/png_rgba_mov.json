@@ -1,0 +1,79 @@
+{
+    "streams": [
+        {
+            "index": 0,
+            "codec_name": "png",
+            "codec_long_name": "PNG (Portable Network Graphics) image",
+            "codec_type": "video",
+            "codec_tag_string": "png ",
+            "codec_tag": "0x20676e70",
+            "width": 320,
+            "height": 240,
+            "coded_width": 320,
+            "coded_height": 240,
+            "has_b_frames": 0,
+            "sample_aspect_ratio": "1:1",
+            "display_aspect_ratio": "4:3",
+            "pix_fmt": "rgba",
+            "level": -99,
+            "color_range": "pc",
+            "color_space": "gbr",
+            "field_order": "progressive",
+            "id": "0x1",
+            "r_frame_rate": "10/1",
+            "avg_frame_rate": "10/1",
+            "time_base": "1/10240",
+            "start_pts": 0,
+            "start_time": "0.000000",
+            "duration_ts": 10240,
+            "duration": "1.000000",
+            "bit_rate": "71120",
+            "nb_frames": "10",
+            "disposition": {
+                "default": 1,
+                "dub": 0,
+                "original": 0,
+                "comment": 0,
+                "lyrics": 0,
+                "karaoke": 0,
+                "forced": 0,
+                "hearing_impaired": 0,
+                "visual_impaired": 0,
+                "clean_effects": 0,
+                "attached_pic": 0,
+                "timed_thumbnails": 0,
+                "non_diegetic": 0,
+                "captions": 0,
+                "descriptions": 0,
+                "metadata": 0,
+                "dependent": 0,
+                "still_image": 0,
+                "multilayer": 0
+            },
+            "tags": {
+                "handler_name": "VideoHandler",
+                "vendor_id": "FFMP",
+                "encoder": "Lavc63.1.102 png"
+            }
+        }
+    ],
+    "format": {
+        "filename": "png_rgba.mov",
+        "nb_streams": 1,
+        "nb_programs": 0,
+        "nb_stream_groups": 0,
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "format_long_name": "QuickTime / MOV",
+        "start_time": "0.000000",
+        "duration": "1.000000",
+        "size": "9631",
+        "bit_rate": "77048",
+        "probe_score": 100,
+        "tags": {
+            "major_brand": "qt  ",
+            "minor_version": "512",
+            "compatible_brands": "qt  ",
+            "encoder": "Lavf63.1.102"
+        }
+    }
+}

@@ -95,7 +95,49 @@ impl ColorInfo {
             _ => ColorRange::Limited,
         };
         let wide_gamut = matches!(color_primaries, Some("bt2020"));
-        Self { matrix, range, transfer, wide_gamut }
+        Self {
+            matrix,
+            range,
+            transfer,
+            wide_gamut,
+        }
+    }
+}
+
+/// Memory layout of a decoded frame exchanged between FFmpeg, the frame store and the compositor.
+///
+/// All layouts are tightly packed (no row padding):
+/// * `Nv12`: 8-bit Y plane (`w*h` bytes) followed by interleaved Cb/Cr at half resolution (`w*h/2`).
+/// * `P010`: 16-bit little-endian samples with the 10 significant bits in the high bits; Y plane
+///   (`w*h*2` bytes) followed by interleaved Cb/Cr at half resolution (`w*h` bytes).
+/// * `Rgba8`: 8-bit RGBA, straight (non-premultiplied) alpha, sRGB-encoded (`w*h*4`).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize, TS)]
+#[serde(rename_all = "camelCase")]
+#[ts(export)]
+pub enum PixelLayout {
+    Nv12,
+    P010,
+    Rgba8,
+}
+
+impl PixelLayout {
+    /// Bytes for one frame of `width`×`height` (both must be even for the YUV layouts).
+    pub fn frame_bytes(self, width: u32, height: u32) -> usize {
+        let px = width as usize * height as usize;
+        match self {
+            Self::Nv12 => px * 3 / 2,
+            Self::P010 => px * 3,
+            Self::Rgba8 => px * 4,
+        }
+    }
+
+    /// FFmpeg `-pix_fmt` name.
+    pub fn ffmpeg_pix_fmt(self) -> &'static str {
+        match self {
+            Self::Nv12 => "nv12",
+            Self::P010 => "p010le",
+            Self::Rgba8 => "rgba",
+        }
     }
 }
 
@@ -136,10 +178,18 @@ pub struct VideoStreamInfo {
 impl VideoStreamInfo {
     /// Dimensions as displayed (after rotation and sample aspect), used for crop and output sizing.
     pub fn display_size(&self) -> (u32, u32) {
-        let sar = if self.sample_aspect.is_valid() { self.sample_aspect.as_f64() } else { 1.0 };
+        let sar = if self.sample_aspect.is_valid() {
+            self.sample_aspect.as_f64()
+        } else {
+            1.0
+        };
         let w = (f64::from(self.width) * sar).round().max(1.0) as u32;
         let h = self.height;
-        if self.rotation % 180 == 90 { (h, w) } else { (w, h) }
+        if self.rotation % 180 == 90 {
+            (h, w)
+        } else {
+            (w, h)
+        }
     }
 }
 
@@ -172,11 +222,25 @@ mod tests {
 
     #[test]
     fn hdr_tags_are_detected() {
-        let pq = ColorInfo::from_ffprobe_tags(Some("bt2020nc"), Some("smpte2084"), Some("bt2020"), Some("tv"), 2160, false);
+        let pq = ColorInfo::from_ffprobe_tags(
+            Some("bt2020nc"),
+            Some("smpte2084"),
+            Some("bt2020"),
+            Some("tv"),
+            2160,
+            false,
+        );
         assert!(pq.is_hdr());
         assert_eq!(pq.matrix, YuvMatrix::Bt2020);
         assert!(pq.wide_gamut);
-        let hlg = ColorInfo::from_ffprobe_tags(Some("bt2020nc"), Some("arib-std-b67"), Some("bt2020"), None, 2160, false);
+        let hlg = ColorInfo::from_ffprobe_tags(
+            Some("bt2020nc"),
+            Some("arib-std-b67"),
+            Some("bt2020"),
+            None,
+            2160,
+            false,
+        );
         assert_eq!(hlg.transfer, TransferFunction::Hlg);
     }
 }

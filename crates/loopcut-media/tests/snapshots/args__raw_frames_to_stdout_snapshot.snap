@@ -1,0 +1,27 @@
+---
+source: crates/loopcut-media/tests/args.rs
+expression: lossy(cmd.args())
+---
+[
+    "-hide_banner",
+    "-loglevel",
+    "warning",
+    "-nostdin",
+    "-progress",
+    "pipe:2",
+    "-nostats",
+    "-protocol_whitelist",
+    "file,pipe",
+    "-noautorotate",
+    "-i",
+    "C:\\clips\\input.mp4",
+    "-vf",
+    "scale=160:120",
+    "-frames:v",
+    "10",
+    "-pix_fmt",
+    "nv12",
+    "-f",
+    "rawvideo",
+    "pipe:1",
+]

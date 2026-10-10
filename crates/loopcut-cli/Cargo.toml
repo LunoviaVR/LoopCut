@@ -17,6 +17,7 @@ loopcut-core = { workspace = true }
 loopcut-media = { workspace = true }
 loopcut-render = { workspace = true }
 loopcut-export = { workspace = true }
+loopcut-hw = { workspace = true }
 clap = { workspace = true }
 anyhow = { workspace = true }
 serde_json = { workspace = true }

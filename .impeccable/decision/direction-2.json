@@ -1,0 +1,50 @@
+{
+  "title": "Choose LoopCut's visual world — safer hand",
+  "question": "The familiar end of the spectrum: three grounded directions plus the category standard. Pick one, steer, or re-roll.",
+  "options": [
+    {
+      "id": "grounded-control-room",
+      "label": "Grading Suite Control Room",
+      "kicker": "FAMILIAR",
+      "lineage": "post-production color suites: calibrated monitor walls, waveform and vectorscope, control-panel tally",
+      "thesis": "A post-house suite scaled down for loops: the image judged on a calibrated monitor and measured by scopes.",
+      "palette": ["#16171a", "#1f2125", "#c9ccd2", "#f5f6f8", "#4fa3ff", "#f2c14e"],
+      "materials": ["matte graphite panels", "scope traces", "LED tally amber for live state"],
+      "viewport": "A calibrated-neutral monitor center stage; live size and fps readouts as compact scopes under it; a dense right inspector.",
+      "risk": "Closest to Resolve: dependable, but the least identity of the three."
+    },
+    {
+      "id": "grounded-sampler-deck",
+      "label": "Loop Sampler Deck",
+      "kicker": "FAMILIAR",
+      "lineage": "SP-404, MPC and OP-1 grooveboxes",
+      "thesis": "Loops handled like a sampler: chop points, pads and readouts you can play from the keyboard.",
+      "palette": ["#1a1918", "#262422", "#e9e4da", "#ff5a1f", "#f2d16b"],
+      "materials": ["rubber-pad segment blocks", "segment-LCD readouts", "silk-screened legends"],
+      "viewport": "The monitor as the sampler's screen; the timeline as a chop strip of pad-like segments; fps and size on LCD-style readouts.",
+      "risk": "Hardware skeuomorphism turns costume-y if pads and legends become decoration."
+    },
+    {
+      "id": "grounded-console-studio",
+      "label": "Console Capture Studio",
+      "kicker": "FAMILIAR",
+      "lineage": "PlayStation and Xbox capture-and-share flows, the Steam overlay",
+      "thesis": "Clipping feels like the console's own Create menu, grown into a full editor.",
+      "palette": ["#0c0e14", "#171b26", "#e8ecf4", "#3d7bff", "#ffd166"],
+      "materials": ["flat tiles", "large focus rings", "shortcut glyphs styled like controller prompts"],
+      "viewport": "A big preview; a horizontal capture rail with trim handles; oversized focus states; keyboard shortcuts shown as button prompts.",
+      "risk": "Tile language drifts toward the generic dashboard look you ruled out."
+    }
+  ],
+  "reroll": { "registers": ["safer", "bolder"] },
+  "canon": true,
+  "canonCard": {
+    "label": "The editor standard (Resolve, CapCut desktop, Premiere)",
+    "thesis": "What DaVinci Resolve, CapCut desktop and Premiere ship, executed at their craft level.",
+    "palette": ["#1e1f22", "#2b2d31", "#d9dadd", "#3d7eff"],
+    "materials": ["graphite docked panels", "icon toolbars", "blue selection"],
+    "viewport": "A centered program monitor, docked panels left and right, a timeline below, blue selection.",
+    "risk": "Indistinguishable from the editors it stands beside, by design."
+  },
+  "steer": true
+}

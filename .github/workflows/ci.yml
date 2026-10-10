@@ -1,0 +1,112 @@
+# Continuous integration: formatting, lints, Rust and TypeScript tests, generated-bindings drift, dependency policy.
+#
+# Pinned action majors (checked against the GitHub release/tag API when this file was written):
+#   actions/checkout@v7, actions/setup-node@v7, actions/cache@v6, Swatinem/rust-cache@v2,
+#   EmbarkStudios/cargo-deny-action@v2, dtolnay/rust-toolchain@stable (branch ref; no releases).
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: "1"
+
+jobs:
+  windows:
+    name: Windows (Rust, TypeScript, FFmpeg)
+    runs-on: windows-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        # Git Bash on Windows: the same shell for every step, so scripts behave identically locally and in CI.
+        shell: bash
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js 24
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install JavaScript dependencies
+        run: npm ci
+
+      # The pinned FFmpeg archive is ~87 MB. Cache the download; the staged copy is rebuilt from it on every run.
+      - name: Cache pinned FFmpeg download
+        uses: actions/cache@v6
+        with:
+          path: .cache/ffmpeg
+          key: ffmpeg-windows-${{ hashFiles('scripts/ffmpeg.lock.json') }}
+
+      - name: Fetch and verify pinned FFmpeg
+        run: |
+          node scripts/fetch-ffmpeg.mjs
+          node scripts/verify-ffmpeg.mjs
+
+      - name: Generate the test media corpus
+        run: node scripts/gen-test-media.mjs
+
+      - name: Install Rust (stable, clippy, rustfmt)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: Cache Cargo build output
+        uses: Swatinem/rust-cache@v2
+
+      - name: Check Rust formatting
+        run: cargo fmt --all -- --check
+
+      - name: Clippy (warnings are errors)
+        run: cargo clippy --workspace --all-targets -- -D warnings
+
+      # FFmpeg is staged above and WARP ships with Windows, so tests that need either must run here: these variables
+      # turn their local "skip when missing" into a failure.
+      - name: Rust tests
+        env:
+          LOOPCUT_REQUIRE_FFMPEG: "1"
+          LOOPCUT_REQUIRE_GPU_TESTS: "1"
+        run: cargo test --workspace
+
+      # Rust is canonical: regenerate the ts-rs bindings and fail if the committed copies differ. `git add -N`
+      # makes newly generated files visible to `git diff`.
+      - name: Check TypeScript bindings are up to date
+        run: |
+          npm run bindings
+          git add -N src/ipc/bindings
+          git diff --exit-code -- src/ipc/bindings
+
+      - name: TypeScript typecheck
+        run: npm run typecheck
+
+      - name: Biome lint
+        run: npm run lint
+
+      - name: Frontend tests (Vitest)
+        run: npm test
+
+  deny:
+    name: Dependency policy (cargo-deny)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+
+      # Licenses must stay GPL-3.0 compatible (deny.toml); advisories, bans and sources are enforced too.
+      - name: Run cargo-deny
+        uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          command: check
+          command-arguments: licenses advisories bans sources

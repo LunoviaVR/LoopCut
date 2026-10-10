@@ -1,4 +1,5 @@
-import { Channel, invoke } from "@tauri-apps/api/core";
+import { MB_BYTES } from "@/domain/bytes";
+import { benchInvokeFrame, benchChannel as sendFrames, spikeReport } from "@/ipc/commands";
 import { protocolUrl } from "@/ipc/protocol";
 
 /** Webview environment facts that decide the preview architecture (spike a/b). */
@@ -71,7 +72,7 @@ function result(
     frames,
     ms: Math.round(ms),
     fps: Math.round((frames / ms) * 1000 * 10) / 10,
-    mbPerSec: Math.round((bytes / 1024 / 1024 / ms) * 1000 * 10) / 10,
+    mbPerSec: Math.round((bytes / MB_BYTES / ms) * 1000 * 10) / 10,
     errors,
     note,
   };
@@ -86,8 +87,7 @@ export async function benchChannel(
 ): Promise<TransportResult> {
   let received = 0;
   let errors = 0;
-  const channel = new Channel<ArrayBuffer>();
-  channel.onmessage = (msg) => {
+  const onFrame = (msg: ArrayBuffer) => {
     if (msg instanceof ArrayBuffer && msg.byteLength === width * height * 4) {
       drawRgba(ctx, msg, width, height);
     } else {
@@ -96,7 +96,7 @@ export async function benchChannel(
     received++;
   };
   const t0 = performance.now();
-  await invoke("bench_channel", { width, height, count, onFrame: channel });
+  await sendFrames(width, height, count, onFrame);
   while (received < count && performance.now() - t0 < 30_000) {
     await new Promise((r) => setTimeout(r, 1));
   }
@@ -145,7 +145,7 @@ export async function benchInvoke(
   const t0 = performance.now();
   for (let i = 0; i < count; i++) {
     const s = performance.now();
-    const buf = await invoke<ArrayBuffer>("bench_invoke_frame", { width, height, index: i });
+    const buf = await benchInvokeFrame(width, height, i);
     lat.push(performance.now() - s);
     if (!(buf instanceof ArrayBuffer) || buf.byteLength !== width * height * 4) errors++;
     else drawRgba(ctx, buf, width, height);
@@ -198,5 +198,5 @@ export async function runSpikes(canvas: HTMLCanvasElement): Promise<string> {
       }
     }
   }
-  return invoke<string>("spike_report", { json: JSON.stringify(report, null, 2) });
+  return spikeReport(JSON.stringify(report, null, 2));
 }

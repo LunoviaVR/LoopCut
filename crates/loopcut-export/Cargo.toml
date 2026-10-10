@@ -13,16 +13,18 @@ loopcut-core = { workspace = true }
 loopcut-media = { workspace = true }
 loopcut-render = { workspace = true }
 gifski = { workspace = true }
+gif = { workspace = true }
 imagequant = { workspace = true }
 imgref = { workspace = true }
 rgb = { workspace = true }
+bytemuck = { workspace = true }
+pollster = { workspace = true }
 serde = { workspace = true }
 thiserror = { workspace = true }
 tracing = { workspace = true }
+wgpu = { workspace = true }
 crossbeam-channel = { workspace = true }
-
-[dev-dependencies]
-gif = { workspace = true }
+ts-rs = { workspace = true }
 tempfile = { workspace = true }
 
 [lints]

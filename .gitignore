@@ -11,6 +11,10 @@ dist-ssr
 /target/
 /src-tauri/target/
 /src-tauri/gen/schemas
+# ts-rs default output when a test runs without .cargo/config.toml; real bindings live in src/ipc/bindings
+/bindings/
+/crates/*/bindings/
+/src-tauri/bindings/
 
 # Fetched FFmpeg binaries (see scripts/fetch-ffmpeg.mjs)
 /src-tauri/resources/ffmpeg/

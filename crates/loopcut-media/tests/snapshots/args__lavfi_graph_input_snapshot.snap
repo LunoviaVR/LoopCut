@@ -1,0 +1,23 @@
+---
+source: crates/loopcut-media/tests/args.rs
+expression: lossy(cmd.args())
+---
+[
+    "-hide_banner",
+    "-loglevel",
+    "error",
+    "-nostdin",
+    "-progress",
+    "pipe:2",
+    "-nostats",
+    "-y",
+    "-f",
+    "lavfi",
+    "-i",
+    "testsrc2=size=320x240:rate=10:duration=1",
+    "-c:v",
+    "libx264",
+    "-pix_fmt",
+    "yuv420p",
+    "C:\\clips\\plain.mp4",
+]

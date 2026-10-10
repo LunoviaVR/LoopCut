@@ -21,7 +21,8 @@
     "e2e": "playwright test",
     "ffmpeg:fetch": "node scripts/fetch-ffmpeg.mjs",
     "ffmpeg:verify": "node scripts/verify-ffmpeg.mjs",
-    "bindings": "cargo test -p loopcut-core --features ts-export export_bindings",
+    "media:gen": "node scripts/gen-test-media.mjs",
+    "bindings": "cargo test -p loopcut-core",
     "version:bump": "node scripts/bump-version.mjs"
   },
   "dependencies": {
