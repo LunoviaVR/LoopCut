@@ -1,0 +1,20 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Capabilities for the main LoopCut window. The webview never spawns processes or touches the filesystem directly; all media work goes through LoopCut's own Rust commands.",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "dialog:allow-open",
+    "dialog:allow-save",
+    "dialog:allow-message",
+    "dialog:allow-ask",
+    "dialog:allow-confirm",
+    "store:default",
+    "log:default",
+    "window-state:default",
+    "updater:default",
+    "process:allow-restart",
+    "opener:allow-reveal-item-in-dir"
+  ]
+}

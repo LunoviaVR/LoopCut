@@ -1,0 +1,29 @@
+[package]
+name = "loopcut-export"
+description = "LoopCut export orchestration: GIF engines, video encoders, size targeting"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+loopcut-core = { workspace = true }
+loopcut-media = { workspace = true }
+loopcut-render = { workspace = true }
+gifski = { workspace = true }
+imagequant = { workspace = true }
+imgref = { workspace = true }
+rgb = { workspace = true }
+serde = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+crossbeam-channel = { workspace = true }
+
+[dev-dependencies]
+gif = { workspace = true }
+tempfile = { workspace = true }
+
+[lints]
+workspace = true

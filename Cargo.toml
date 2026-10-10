@@ -1,0 +1,86 @@
+[workspace]
+resolver = "3"
+members = ["src-tauri", "crates/*"]
+default-members = ["crates/*"]
+
+[workspace.package]
+version = "0.0.1"
+edition = "2024"
+rust-version = "1.90"
+license = "GPL-3.0-only"
+repository = "https://github.com/LunoviaVR/LoopCut"
+authors = ["LoopCut contributors"]
+
+[workspace.dependencies]
+# Internal crates
+loopcut-core = { path = "crates/loopcut-core" }
+loopcut-media = { path = "crates/loopcut-media" }
+loopcut-render = { path = "crates/loopcut-render" }
+loopcut-export = { path = "crates/loopcut-export" }
+
+# Tauri (exact pins: never pick up 3.0 alphas; >=2.11.1 required for GHSA-7gmj-67g7-phm9)
+tauri = { version = "=2.12.2", features = [] }
+tauri-build = { version = "2.7.1", features = [] }
+tauri-plugin-dialog = "2.8.1"
+tauri-plugin-store = "2.5.0"
+tauri-plugin-log = "2.10.0"
+tauri-plugin-window-state = "2.5.0"
+tauri-plugin-single-instance = "2.5.2"
+tauri-plugin-updater = "2.13.2"
+tauri-plugin-process = "2.4.0"
+tauri-plugin-opener = "2.7.0"
+
+# Media / rendering / encoding
+wgpu = "30.0.1"
+cosmic-text = "0.19.0"
+tiny-skia = "0.12.0"
+gifski = { version = "=1.34.0", default-features = false, features = ["gifsicle"] }
+imagequant = "4.4.1"
+gif = "0.14.2"
+imgref = "1.12.3"
+rgb = { version = "0.8.53", default-features = false, features = ["bytemuck"] }
+bytemuck = { version = "1.25.2", features = ["derive"] }
+
+# General
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.151"
+thiserror = "2.0.21"
+anyhow = "1.0.104"
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
+tokio = { version = "1.53.2", features = ["rt-multi-thread", "macros", "sync", "time", "process", "io-util", "fs"] }
+tokio-util = "0.7.20"
+parking_lot = "0.12.5"
+crossbeam-channel = "0.5.17"
+pollster = "1.0.1"
+libloading = "0.9.0"
+percent-encoding = "2.3.2"
+http = "1.5.0"
+clap = { version = "4.6.7", features = ["derive"] }
+sha2 = "0.11.0"
+ts-rs = { version = "12.0.1", features = ["serde-compat", "serde-json-impl"] }
+windows = "0.62.2"
+
+# Dev / test
+insta = { version = "1.49.0", features = ["json", "yaml"] }
+proptest = "1.11.0"
+tempfile = "3.27.0"
+
+[workspace.lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = 3
+strip = true
+
+# Image/encoding crates are painfully slow unoptimized; keep dev builds usable.
+[profile.dev.package."*"]
+opt-level = 2
+
+[profile.test.package."*"]
+opt-level = 2

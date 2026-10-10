@@ -1,0 +1,93 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "LoopCut",
+  "version": "../package.json",
+  "identifier": "io.github.lunoviavr.loopcut",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "LoopCut",
+        "width": 1440,
+        "height": 900,
+        "minWidth": 1024,
+        "minHeight": 640,
+        "center": true,
+        "visible": true,
+        "backgroundColor": "#0f1012",
+        "dragDropEnabled": true,
+        "useHttpsScheme": false
+      }
+    ],
+    "security": {
+      "csp": {
+        "default-src": "'self'",
+        "script-src": "'self'",
+        "style-src": "'self' 'unsafe-inline'",
+        "img-src": "'self' data: blob: http://loopcut.localhost",
+        "media-src": "'self' blob: http://loopcut-media.localhost",
+        "connect-src": "'self' ipc: http://ipc.localhost http://loopcut.localhost",
+        "font-src": "'self' data:",
+        "object-src": "'none'",
+        "base-uri": "'self'",
+        "frame-src": "'none'"
+      },
+      "devCsp": null,
+      "freezePrototype": true
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis"],
+    "createUpdaterArtifacts": true,
+    "publisher": "LoopCut contributors",
+    "copyright": "Copyright (C) LoopCut contributors. Licensed under GPL-3.0.",
+    "category": "Video",
+    "shortDescription": "GIF maker with a video-editor workflow",
+    "longDescription": "LoopCut turns any video into high-quality GIFs and looping MP4/WebM with trimming, captions, color grading, cropping and hardware acceleration.",
+    "license": "GPL-3.0-only",
+    "licenseFile": "../LICENSE",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "resources": {
+      "resources/ffmpeg/": "ffmpeg/"
+    },
+    "fileAssociations": [
+      {
+        "ext": ["loopcut"],
+        "name": "LoopCut Project",
+        "description": "LoopCut project",
+        "role": "Editor",
+        "rank": "Owner"
+      }
+    ],
+    "windows": {
+      "digestAlgorithm": "sha256",
+      "webviewInstallMode": { "type": "downloadBootstrapper", "silent": true },
+      "nsis": {
+        "installMode": "currentUser",
+        "installerHooks": "./windows/hooks.nsh"
+      }
+    }
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDM3QjA1RjY5REVDM0RGMDIKUldRQzM4UGVhVit3TjhURUt3ajFzQnVKb0JGUzB0NkVWaXdPWDJ5Y3hZSDVpelR0aldHNXdNYlkK",
+      "endpoints": ["https://github.com/LunoviaVR/LoopCut/releases/latest/download/latest.json"],
+      "windows": {
+        "installMode": "passive"
+      }
+    }
+  }
+}

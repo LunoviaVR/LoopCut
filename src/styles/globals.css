@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+/* LoopCut design tokens. Neutral surfaces keep color judgment honest around the preview. */
+@theme {
+  --color-bg: #0e0f11;
+  --color-panel: #15161a;
+  --color-raised: #1c1e23;
+  --color-overlay: #24272d;
+  --color-line: #2a2d34;
+  --color-line-strong: #3a3e47;
+  --color-fg: #e9eaee;
+  --color-fg-muted: #a1a6b1;
+  --color-fg-subtle: #6f7480;
+  --color-accent: #ff6a3d;
+  --color-accent-strong: #ff8a63;
+  --color-accent-fg: #160803;
+  --color-ok: #4ccf8a;
+  --color-warn: #f2b84b;
+  --color-danger: #ff5d6c;
+  --color-preview: #0a0a0b;
+
+  --font-sans: "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Cascadia Mono", "Consolas", ui-monospace, monospace;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+    overflow: hidden;
+  }
+
+  input,
+  textarea,
+  [contenteditable="true"] {
+    user-select: text;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 1px;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  }
+}

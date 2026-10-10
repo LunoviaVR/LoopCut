@@ -1,0 +1,4 @@
+[env]
+# ts-rs: generated TypeScript bindings land in the frontend, and 64-bit integers are plain JSON numbers.
+TS_RS_EXPORT_DIR = { value = "src/ipc/bindings", relative = true }
+TS_RS_LARGE_INT = "number"

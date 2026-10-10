@@ -1,0 +1,24 @@
+[package]
+name = "loopcut-render"
+description = "LoopCut GPU compositor (wgpu): color conversion, geometry, grading, LUTs, captions"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+loopcut-core = { workspace = true }
+wgpu = { workspace = true }
+bytemuck = { workspace = true }
+pollster = { workspace = true }
+cosmic-text = { workspace = true }
+tiny-skia = { workspace = true }
+serde = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+parking_lot = { workspace = true }
+
+[lints]
+workspace = true

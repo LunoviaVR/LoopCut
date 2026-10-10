@@ -1,0 +1,20 @@
+{
+  "$comment": "Pinned FFmpeg build bundled with LoopCut. BtbN prunes daily builds after 14 days, so every pin must also be mirrored to LoopCut's own deps-ffmpeg-<version> GitHub release (with the matching FFmpeg source tarball for the GPL source offer). Bump the app version whenever this changes.",
+  "version": "9.0.2-25-g67b60c310b",
+  "license": "GPL-3.0-or-later",
+  "windows-x86_64": {
+    "asset": "ffmpeg-n9.0.2-25-g67b60c310b-win64-gpl-shared-9.0.zip",
+    "sha256": "353cebf22561a21d2b89dedca873d11a7dff4bcb21f4cbed09567506c9762972",
+    "size": 86582065,
+    "urls": [
+      "https://github.com/LunoviaVR/LoopCut/releases/download/deps-ffmpeg-9.0.2-25-g67b60c310b/ffmpeg-n9.0.2-25-g67b60c310b-win64-gpl-shared-9.0.zip",
+      "https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2026-10-10-13-04/ffmpeg-n9.0.2-25-g67b60c310b-win64-gpl-shared-9.0.zip"
+    ],
+    "files": ["bin/ffmpeg.exe", "bin/ffprobe.exe", "bin/*.dll", "LICENSE.txt"]
+  },
+  "source": {
+    "repository": "https://github.com/FFmpeg/FFmpeg",
+    "commit": "67b60c310b",
+    "buildScripts": "https://github.com/BtbN/FFmpeg-Builds"
+  }
+}
